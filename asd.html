@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con sonido de fondo</title>
+</head>
+<body>
+    <h1>Bienvenido a mi página</h1>
+    <p>Esta página tiene sonido de fondo.</p>
+    
+    <audio id="background-audio" autoplay loop>
+        <source src="audio.mp3" type="audio/mpeg">
+        Tu navegador no soporta la reproducción de audio.
+    </audio>
+    
+    <script>
+
+        alert("Bienvenido a Musiic's Brothers!");
+
+
+        document.addEventListener("click", function() {
+            alert("¡Haz hecho clic en la página!");
+            document.getElementById("background-audio").play();
+        }, { once: true });
+    </script>
+</body>
+</html>

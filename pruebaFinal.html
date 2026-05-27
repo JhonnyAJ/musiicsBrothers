@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Plataforma - Nivel 2</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #1b1f3a, #2c3e50); /* Gradiente para el cielo */
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: transparent; z-index: 1000; display: flex; justify-content: center; align-items: center; color: white; font-size: 2em; transition: background-color 1s ease-in-out;">
+    <div id="loadingText" style="position: absolute; color: white; font-size: 2em; opacity: 0; transition: opacity 1s ease-in-out;">Cargando...</div>
+  </div>
+
+  <div id="initial-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+    <div style="color: white; font-size: 2em; text-align: center; cursor: pointer;">Haz clic para continuar</div>
+  </div>
+
+  <audio id="background-music" loop>
+    <source src="assets/sonidos/menuDistorsionado.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+
+  <canvas style="margin: 300px;" id="gameCanvas"></canvas>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Ajustar tamaño del canvas a pantalla completa
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function playBackgroundMusic() {
+      const backgroundMusic = document.getElementById('background-music');
+      backgroundMusic.volume = 0.05; // Ajustar el volumen
+      backgroundMusic.play().catch(error => {
+        console.error('Error al reproducir la música de fondo:', error);
+      });
+    }
+
+
+    function resetGame() {
+  player.x = 50;
+  player.y = canvas.height - 100;
+  player.dx = 0;
+  player.dy = 0;
+  player.isJumping = false;
+  enemies = [];
+  coins = [];
+  projectiles = [];
+  score = 0;
+  cameraOffsetX = 0;
+  cameraOffsetY = 0;
+
+  // Reiniciar la barra y la lluvia de enemigos
+  stopEnemyRain();
+  startEnemyRain();
+}
+
+// Generar enemigos aleatorios
+function spawnEnemy() {
+    const enemy = {
+      x: Math.random() * (canvas.width - 32), // Posición X aleatoria dentro del canvas
+      y: -32, // Comienza fuera de la pantalla, en la parte superior
+      width: 32,
+      height: 32,
+      speed: Math.random() * 3 + 2, // Velocidad aleatoria entre 2 y 5
+    };
+    enemies.push(enemy);
+  }
+
+    // Mostrar overlay inicial y manejar clic
+    window.onload = function () {
+      const initialOverlay = document.getElementById('initial-overlay');
+      initialOverlay.addEventListener('click', function () {
+        initialOverlay.style.display = 'none'; // Ocultar el overlay
+        playBackgroundMusic(); // Reproducir la música
+        startEnemyRain(); // Inicia la lluvia de enemigos
+      });
+    };
+
+    // Jugador
+    const player = {
+      x: 400,
+      y: canvas.height - 100, 
+      width: 32,
+      height: 64,
+      dx: 0,
+      dy: 0,
+      speed: 5,
+      gravity: 0.5,
+      jumpForce: -15,
+      isJumping: false,
+      frameX: 0,
+      frameY: 0,
+      frameWidth: 32,
+      frameHeight: 64,
+      lastDirection: 'right', // 'right' o 'left'
+      walkFrame: 0,
+      walkFrameCounter: 0,
+    };
+
+    const portal = {
+  x: 3200,
+  y: canvas.height - 2500,
+  width: 50,
+  height: 100,
+  radius: 50,
+};
+
+    const playerImage = new Image();
+    playerImage.src = 'assets/Pixel_art-Millyo_stop1.png'; // Cambia esta ruta si es necesario
+
+    const playerImageInverse = new Image();
+    playerImageInverse.src = 'assets/Pixel_art-Millyo_stop1.png'; // Cambia esta ruta si es necesario
+
+
+    const playerJumpImage = new Image();
+    playerJumpImage.src = 'assets/jumping/Millyo_pixel_art_-_Jump1.png'; // Cambia esta ruta si es necesario
+
+    const playerJumpImageInverse = new Image();
+    playerJumpImageInverse.src = 'assets/jumping/Millyo_pixel_art_-_Jump-1.png'; // Cambia esta ruta si es necesario
+
+    //caminar
+    const playerWalkImage1 = new Image();
+    playerWalkImage1.src = 'assets/walk/MillyoWalk1.png'; // Cambia esta ruta si es necesario
+
+    const playerWalkImage2 = new Image();
+    playerWalkImage2.src = 'assets/walk/MillyoWalk2.png'; // Cambia esta ruta si es necesario
+
+    //caminar inverso
+
+    const playerWalkImage1Inverse = new Image();
+    playerWalkImage1Inverse.src = 'assets/walk/MillyoWalk-1.png'; // Cambia esta ruta si es necesario
+
+    const playerWalkImage2Inverse = new Image();
+    playerWalkImage2Inverse.src = 'assets/walk/MillyoWalk-2.png'; // Cambia esta ruta si es necesario
+
+// Enemigos con imagen
+    const enemyImage = new Image();
+    enemyImage.src = 'assets/Pixel_art-Monster.png';
+
+
+    // Enemigos
+    let enemies = [
+];
+
+    // Proyectiles
+    let projectiles = [];
+
+    // Plataformas (ajustadas dinámicamente)
+// Plataformas (ajustadas dinámicamente)
+let platforms = [
+  { x: 0, y: canvas.height - 50, width: canvas.width , height: 50 } // Suelo principal
+];
+
+    // Monedas
+    let coins = [
+    ];
+
+    // Puntaje
+    let score = 0;
+
+    // Desplazamiento de la cámara
+    let cameraOffsetX = 0;
+    let cameraOffsetY = 0;
+
+    // Dibuja el portal
+    function drawPortal() {
+      const gradient = ctx.createRadialGradient(
+        portal.x - cameraOffsetX,
+        portal.y - cameraOffsetY,
+        10,
+        portal.x - cameraOffsetX,
+        portal.y - cameraOffsetY,
+        portal.radius
+      );
+      gradient.addColorStop(0, 'blue');
+      gradient.addColorStop(1, 'cyan');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(portal.x - cameraOffsetX, portal.y - cameraOffsetY, portal.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Dibuja al jugador
+    function drawPlayer() {
+  let imageToDraw = playerImage;
+  if (player.isJumping) {
+    imageToDraw = player.lastDirection === 'left' ? playerJumpImageInverse : playerJumpImage;
+  } else if (player.dx !== 0) {
+    if (player.lastDirection === 'right') {
+      imageToDraw = player.walkFrame === 0 ? playerWalkImage1 : playerWalkImage2;
+    } else {
+      imageToDraw = player.walkFrame === 0 ? playerWalkImage1Inverse : playerWalkImage2Inverse;
+    }
+  } else {
+    imageToDraw = player.lastDirection === 'left' ? playerImageInverse : playerImage;
+  }
+  ctx.drawImage(
+    imageToDraw,
+    player.frameX * player.frameWidth,
+    player.frameY * player.frameHeight,
+    player.frameWidth,
+    player.frameHeight,
+    player.x - cameraOffsetX,
+    player.y - cameraOffsetY,
+    player.width,
+    player.height
+  );
+}
+
+function drawPlayer() {
+  let imageToDraw = playerImage;
+  if (player.isJumping) {
+    imageToDraw = player.lastDirection === 'left' ? playerJumpImageInverse : playerJumpImage;
+  } else if (player.dx !== 0) {
+    if (player.lastDirection === 'right') {
+      imageToDraw = player.walkFrame === 0 ? playerWalkImage1 : playerWalkImage2;
+    } else {
+      imageToDraw = player.walkFrame === 0 ? playerWalkImage1Inverse : playerWalkImage2Inverse;
+    }
+  } else {
+    imageToDraw = player.lastDirection === 'left' ? playerImageInverse : playerImage;
+  }
+  ctx.drawImage(
+    imageToDraw,
+    player.frameX * player.frameWidth,
+    player.frameY * player.frameHeight,
+    player.frameWidth,
+    player.frameHeight,
+    player.x - cameraOffsetX,
+    player.y - cameraOffsetY,
+    player.width,
+    player.height
+  );
+}
+
+    // Dibujar proyectiles
+    function drawProjectiles() {
+      ctx.fillStyle = 'blue';
+      projectiles.forEach(proj => {
+        ctx.fillRect(proj.x - cameraOffsetX, proj.y - cameraOffsetY, proj.width, proj.height);
+      });
+    }
+
+    // Dibujar enemigos
+function drawEnemies() {
+  enemies.forEach(enemy => {
+    ctx.drawImage(
+      enemyImage,
+      enemy.x - cameraOffsetX,
+      enemy.y - cameraOffsetY,
+      enemy.width,
+      enemy.height
+    );
+  });
+}
+
+  
+
+    function drawRoundedRect(x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Dibujar plataformas
+    function drawPlatforms() {
+      platforms.forEach((platform, index) => {
+        if (index === 0) {
+          // Primera plataforma con gradiente vertical
+          const gradient = ctx.createLinearGradient(platform.x - cameraOffsetX, platform.y - cameraOffsetY, platform.x - cameraOffsetX, platform.y - cameraOffsetY + platform.height);
+          gradient.addColorStop(0, 'purple'); // Color al inicio del gradiente
+          gradient.addColorStop(0.5, 'pink'); // Color en el medio del gradiente
+          gradient.addColorStop(1, 'gray'); // Color al final del gradiente
+          ctx.fillStyle = gradient;
+          ctx.fillRect(platform.x - cameraOffsetX, platform.y - cameraOffsetY, platform.width, platform.height);
+        } else {
+          // Otras plataformas con gradiente y bordes redondeados
+          const gradient = ctx.createLinearGradient(platform.x - cameraOffsetX, platform.y - cameraOffsetY, platform.x - cameraOffsetX + platform.width, platform.y - cameraOffsetY);
+          gradient.addColorStop(0, 'purple'); // Color al inicio del gradiente
+          gradient.addColorStop(0.5, 'pink'); // Color en el medio del gradiente
+          gradient.addColorStop(1, 'purple'); // Color al final del gradiente
+          ctx.fillStyle = gradient;
+          drawRoundedRect(platform.x - cameraOffsetX, platform.y - cameraOffsetY, platform.width, platform.height, 7);
+        }
+      });
+    }
+
+    // Dibujar monedas
+    function drawCoins() {
+      ctx.fillStyle = 'gold';
+      coins.forEach(coin => {
+        ctx.beginPath();
+        ctx.arc(coin.x - cameraOffsetX, coin.y - cameraOffsetY, coin.width / 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // Mover el jugador
+    function updatePlayer() {
+      player.x += player.dx;
+      player.dy += player.gravity;
+      player.y += player.dy;
+
+      // Limitar el movimiento del jugador al rango de la lluvia de enemigos
+      if (player.x < 0) {
+        player.x = 0;
+      }
+      if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+      }
+
+      // Evitar que el jugador caiga por debajo del canvas
+      if (player.y + player.height > canvas.height) {
+        player.y = canvas.height - player.height;
+        player.dy = 0;
+        player.isJumping = false;
+      }
+
+      // Actualizar el desplazamiento de la cámara
+      cameraOffsetX = player.x - canvas.width / 2; // Ajusta la posición horizontal de la cámara
+      cameraOffsetY = player.y - (canvas.height * 3 / 4); // Ajusta la posición vertical de la cámara
+    }
+
+    // Controlar animación del jugador
+    let frameCounter = 0;
+    function updatePlayerAnimation() {
+  if (player.dx !== 0 && !player.isJumping) {
+    player.walkFrameCounter++;
+    if (player.walkFrameCounter >= 15) { // Ajusta para velocidad de animación
+      player.walkFrame = (player.walkFrame + 1) % 2;
+      player.walkFrameCounter = 0;
+    }
+  } else {
+    player.walkFrame = 0;
+    player.walkFrameCounter = 0;
+  }
+}
+
+    // Detectar colisiones con enemigos
+    function checkEnemyCollisions() {
+      enemies.forEach(enemy => {
+        if (
+          player.x < enemy.x + enemy.width &&
+          player.x + player.width > enemy.x &&
+          player.y < enemy.y + enemy.height &&
+          player.y + player.height > enemy.y
+        ) {
+          resetGame(); // Reiniciar el nivel sin recargar la página
+        }
+      });
+    }
+
+    // Detectar colisiones con plataformas
+    function checkCollisions() {
+      platforms.forEach((platform) => {
+        if (
+          player.x < platform.x + platform.width &&
+          player.x + player.width > platform.x &&
+          player.y + player.height > platform.y &&
+          player.y + player.height - player.dy <= platform.y
+        ) {
+          player.y = platform.y - player.height;
+          player.dy = 0;
+          player.isJumping = false;
+
+          if(platform.move == true){
+            player.x += platform.moveSpeed * platform.moveDirection;
+          }
+        }
+
+      });
+    }
+
+    // Detectar colisiones con monedas
+    function checkCoinCollisions() {
+      coins = coins.filter((coin) => {
+        if (
+          player.x < coin.x + coin.width &&
+          player.x + player.width > coin.x &&
+          player.y < coin.y + coin.height &&
+          player.y + player.height > coin.y
+        ) {
+          score += 10; // Incrementar el puntaje
+          return false; // Eliminar la moneda
+        }
+        return true;
+      });
+    }
+
+    // Detectar colisión con el portal
+    function checkPortalCollision() {
+  if (
+    player.x < portal.x + portal.width &&
+    player.x + player.width > portal.x &&
+    player.y < portal.y + portal.height &&
+    player.y + player.height > portal.y
+  ) {
+    if(localStorage.getItem('levelCompleted') === 'true') {
+        return; // Evitar que el jugador pase al siguiente nivel si no ha completado el actual
+      }
+        // Detener el bucle del juego
+        cancelAnimationFrame(gameLoop);
+        localStorage.setItem('levelCompleted', 'true'); // Guardar el estado en localStorage
+
+
+        // Obtener los elementos del DOM
+        const overlay = document.getElementById('overlay');
+        const loadingText = document.getElementById('loadingText');
+
+        // Mostrar el overlay y el texto de "Cargando..."
+        overlay.style.display = 'flex';
+        overlay.style.backgroundColor = 'transparent';
+        loadingText.style.opacity = '0';
+
+        // Función para manejar las transiciones en secuencia
+        function handleTransition(step) {
+            switch (step) {
+                case 1:
+                    // Paso 1: Desvanecer a negro y mostrar "Cargando..."
+                    overlay.style.backgroundColor = 'black';
+                    loadingText.style.opacity = '1';
+                    setTimeout(() => handleTransition(2), 2000); // Esperar 1 segundo
+                    break;
+                case 2:
+                    // Paso 2: Cambiar a morado y ocultar "Cargando..."
+                    overlay.style.backgroundColor = 'purple';
+                    loadingText.style.opacity = '0';
+                    setTimeout(() => handleTransition(3), 2000); // Esperar 1 segundo
+                    break;
+                case 3:
+                    // Paso 3: Cambiar a blanco y mostrar "¡Nivel Completado!"
+                    overlay.style.backgroundColor = 'white';
+                    overlay.style.color = 'black';
+                    overlay.textContent = '¡Nivel Completado!';
+                    setTimeout(() => handleTransition(4), 3000); // Esperar 2 segundos
+                    break;
+                case 4:
+                    // Paso 4: Mostrar "Capítulo 2" con efecto de sombras
+                    overlay.textContent = '¿Qué fue eso? Antes de entrar al portal, se sintió... extraño';
+                    overlay.style.textShadow = `
+    0px 5px 10px rgba(0, 0, 0, 0.9), /* Sombra oscura cerca del texto */
+    0px 10px 20px rgba(50, 50, 50, 0.7), /* Penumbra más suave */
+    0px 15px 30px rgba(0, 0, 0, 0.5), /* Sombras profundas */
+    0px 20px 40px rgba(30, 30, 30, 0.4), /* Efecto de niebla */
+    0px 25px 50px rgba(10, 10, 10, 0.3) /* Distante y misterioso */
+`;                  
+                    overlay.style.cursor = 'pointer';
+                    overlay.addEventListener('click', () => {
+                      handleTransition(5);
+                    });
+                    break;
+                case 5:
+                    // Paso 4: Mostrar "Capítulo 2" con efecto de sombras
+                    overlay.textContent = 'Capítulo 2. Sombras del Camino';
+                    overlay.style.textShadow = `
+    0px 5px 10px rgba(0, 0, 0, 0.9), /* Sombra oscura cerca del texto */
+    0px 10px 20px rgba(50, 50, 50, 0.7), /* Penumbra más suave */
+    0px 15px 30px rgba(0, 0, 0, 0.5), /* Sombras profundas */
+    0px 20px 40px rgba(30, 30, 30, 0.4), /* Efecto de niebla */
+    0px 25px 50px rgba(10, 10, 10, 0.3) /* Distante y misterioso */
+`;                  
+                    overlay.style.cursor = 'pointer';
+                    overlay.addEventListener('click', () => {
+                        window.location.href = 'caminoAlDestino.html';
+                    });
+                    break;
+            }
+        }
+
+        // Iniciar la secuencia de transiciones
+        handleTransition(1);
+    }
+}
+
+    // Función para disparar proyectiles
+    function shootProjectile() {
+      projectiles.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        width: 10,
+        height: 5,
+        speed: 10,
+        direction: player.dx >= 0 ? 1 : -1,
+      });
+    }
+
+    // Mover proyectiles
+    function updateProjectiles() {
+      projectiles.forEach((proj, index) => {
+        proj.x += proj.speed * proj.direction;
+        if (proj.x < 0 || proj.x > canvas.width) {
+          projectiles.splice(index, 1);
+        }
+      });
+    }
+
+     // Actualizar enemigos
+  function updateEnemies() {
+    enemies.forEach((enemy, index) => {
+      enemy.y += enemy.speed; // Los enemigos caen hacia abajo
+
+      // Eliminar enemigos que salen de la pantalla
+      if (enemy.y > canvas.height) {
+        enemies.splice(index, 1);
+      }
+
+      // Detectar colisión con el jugador
+      if (
+        player.x < enemy.x + enemy.width &&
+        player.x + player.width > enemy.x &&
+        player.y < enemy.y + enemy.height &&
+        player.y + player.height > enemy.y
+      ) {
+        resetGame();
+      }
+    });
+  }
+
+    // Actualizar plataformas móviles
+    function updatePlatforms() {
+      platforms.forEach((platform) => {
+        if (platform.move) {
+          platform.x += platform.moveDirection * platform.moveSpeed;
+          if (platform.x <= 0 || platform.x + platform.width >= canvas.width) {
+            platform.moveDirection *= -1;
+          }
+        }
+      });
+    }
+
+    let raining = false;
+let rainInterval = null;
+let rainTimeout = null;
+let rainTimeLeft = 20; // segundos
+
+// Mostrar cuenta regresiva en pantalla
+function drawTimer() {
+  ctx.save();
+  ctx.font = "bold 32px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`Tiempo: ${rainTimeLeft}s`, 30, 50);
+  ctx.restore();
+}
+
+// Iniciar lluvia de enemigos por 20 segundos
+function startEnemyRain() {
+  raining = true;
+  rainTimeLeft = 100;
+  rainInterval = setInterval(spawnEnemy, 70); // cada 400ms cae un enemigo
+  rainTimeout = setInterval(() => {
+    rainTimeLeft--;
+    if (rainTimeLeft <= 0) {
+      pararFase1();
+    }
+  }, 1000);
+}
+
+// Detener la lluvia de enemigos
+function stopEnemyRain() {
+  raining = false;
+  clearInterval(rainInterval);
+  clearInterval(rainTimeout);
+  // Puedes mostrar un mensaje o permitir avanzar al siguiente nivel aquí
+  
+}
+
+function pararFase1() {
+  stopEnemyRain();
+  raining = false;
+
+  const overlay = document.getElementById('overlay');
+  overlay.style.display = 'flex';
+  overlay.style.backgroundColor = 'rgba(0,0,0,1)';
+  overlay.style.color = 'white';
+  overlay.style.cursor = 'pointer';
+  overlay.innerHTML = ''; // Limpiar contenido
+
+  // Mensajes a mostrar secuencialmente
+  const finalMessages = [
+    '¿Cómo sobreviviste a la sobrecarga de energía?',
+    '¿Qué fue eso? Todo se sintió muy extraño...',
+    'Ahora dime, donde está Milly?',
+    'Ni pienses que me pudiste vencer, chamaco. ',
+    'Aún contamos con nuestra reserva de energía medieval. Esa niña nos servirá para culminar nuetro plan de dominar el mundo.',
+    '¿Milly?',
+    'Nadie podrá detenernos, ¡ni siquiera tú!',
+    'En un mundo muy muy lejano...',
+    '¿Hola?,¿Que me pasó?',
+    '¿Dónde estoy? ¿Qué es este lugar?',
+    'Perdonad mi atrevimiento, joven dama, parecéis extraviada. ¿Puedo brindaros auxilio?',
+    'Continuará...',
+    '¡Gracias por sus momentos de alegría y entretenimiento hermanos Musiic!'
+  ];
+
+  // Puedes poner una imagen diferente para cada mensaje si quieres, o la misma para todos
+  const profileImages = [
+      "assets/PerfilMonster.png",
+      "assets/expresiones/sorpresa.png",
+      "assets/expresiones/enojo.png",
+      "assets/PerfilMonster.png",
+      "assets/PerfilMonster.png",
+      "assets/expresiones/sorpresa.png",
+      "assets/PerfilMonster.png",
+      "",
+      "assets/expresiones/MillySorpresa.png",
+      "assets/expresiones/MillyDesubicada.png",
+      "",
+      "",
+      "assets/expresiones/hermanosMusiic.png",
+  
+  ];
+
+  let currentMessage = 0;
+
+  // Contenedor para imagen y texto
+  const containerDiv = document.createElement('div');
+  containerDiv.style.display = 'flex';
+  containerDiv.style.alignItems = 'center';
+  containerDiv.style.justifyContent = 'center';
+  containerDiv.style.gap = '32px';
+  containerDiv.style.flexDirection = 'row';
+  containerDiv.style.width = 'auto';
+  containerDiv.style.padding = '32px 48px';
+  containerDiv.style.background = 'rgba(30,30,30,0.7)';
+  containerDiv.style.borderRadius = '24px';
+  containerDiv.style.boxShadow = '0 8px 32px #000a';
+
+  // Imagen de perfil
+  const img = document.createElement('img');
+  img.src = profileImages[0];
+  img.style.width = '90px';
+  img.style.height = '90px';
+  img.style.borderRadius = '50%';
+  img.style.objectFit = 'cover';
+  img.style.boxShadow = '0 0 10px #000a';
+  img.style.opacity = '0';
+  img.style.transition = 'opacity 1s';
+
+  // Texto animado
+  const messageDiv = document.createElement('div');
+  messageDiv.style.opacity = '0';
+  messageDiv.style.transition = 'opacity 1s';
+  messageDiv.style.fontSize = '2em';
+  messageDiv.style.textAlign = 'left';
+  messageDiv.style.maxWidth = '50vw';
+  messageDiv.style.lineHeight = '1.3';
+  messageDiv.style.margin = '0';
+
+  // Añadir al overlay
+  containerDiv.appendChild(img);
+  containerDiv.appendChild(messageDiv);
+  overlay.appendChild(containerDiv);
+
+  function showMessage(index) {
+    messageDiv.style.opacity = '0';
+    img.style.opacity = '0';
+    setTimeout(() => {
+      messageDiv.textContent = finalMessages[index];
+      img.src = profileImages[index];
+      messageDiv.style.opacity = '1';
+      img.style.opacity = '1';
+    }, 200); // Pequeño delay para el fade out-in
+  }
+
+  showMessage(currentMessage);
+
+  overlay.onclick = () => {
+    if (currentMessage < finalMessages.length - 1) {
+      currentMessage++;
+      showMessage(currentMessage);
+    } else {
+      // Último mensaje, ir al siguiente nivel
+      overlay.onclick = null;
+      overlay.style.cursor = 'default';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 700);
+    }
+  };
+}
+
+
+
+// Modifica spawnEnemy para que solo funcione si está lloviendo
+function spawnEnemy() {
+  if (!raining) return;
+  const enemy = {
+    x: Math.random() * (canvas.width - 32),
+    y: -32,
+    width: 32,
+    height: 32,
+    speed: Math.random() * 3 + 2,
+  };
+  enemies.push(enemy);
+}
+
+// Modifica gameLoop para dibujar el temporizador
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawPlatforms();
+  drawCoins();
+  drawEnemies();
+  drawProjectiles();
+  updatePlayer();
+  updateProjectiles();
+  updateEnemies();
+  updatePlatforms();
+  checkEnemyCollisions();
+  checkPortalCollision();
+  checkCollisions();
+  checkCoinCollisions();
+  updatePlayerAnimation();
+  drawPlayer();
+  drawPortal();
+  if (raining) drawTimer();
+  if (raining) drawProgressBar();
+  requestAnimationFrame(gameLoop);
+}
+    localStorage.setItem('levelCompleted', 'false'); 
+
+    gameLoop(); // Iniciar el ciclo de juego
+
+    // Controles
+    document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'd') {
+    player.dx = player.speed;
+    player.lastDirection = 'right';
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'a') {
+    player.dx = -player.speed;
+    player.lastDirection = 'left';
+  }
+  if ((e.key === 'ArrowUp' || e.key === 'w') && !player.isJumping) {
+    player.dy = player.jumpForce;
+    player.isJumping = true;
+  }
+  if (e.key === ' ') {
+    shootProjectile();
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'd' || e.key === 'a') player.dx = 0;
+});
+
+function drawProgressBar() {
+  const barWidth = 400;
+  const barHeight = 25;
+  const x = 30;
+  const y = 30;
+  const progress = rainTimeLeft / 100; // 60 es el tiempo total en segundos
+
+  // Fondo de la barra
+  ctx.save();
+  ctx.globalAlpha = 0.5;
+  ctx.fillStyle = "#222";
+  ctx.fillRect(x, y, barWidth, barHeight);
+  ctx.globalAlpha = 1;
+
+  // Barra de progreso
+  ctx.fillStyle = "#00e0ff";
+  ctx.fillRect(x, y, barWidth * progress, barHeight);
+
+  // Borde
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x, y, barWidth, barHeight);
+
+  // Texto
+  ctx.font = "bold 18px Arial";
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "center";
+  ctx.fillText("Sobrevive", x + barWidth / 2, y + barHeight - 6);
+  ctx.restore();
+}
+  </script>
+</body>
+</html>

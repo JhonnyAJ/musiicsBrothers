@@ -1,0 +1,39 @@
+¿Qué es este proyecto?
+Musiic’s Brothers es un videojuego de plataformas hecho en HTML, CSS y JavaScript puro, inspirado en los clásicos de la vieja escuela pero con un toque personal y moderno. 
+
+El juego incluye:
+
+- Animaciones de personajes y enemigos.
+- Plataformas con efectos visuales.
+- Monedas y portales.
+- Efectos de partículas en el menú y créditos.
+- Diálogos y escenas con imágenes tipo “foto de perfil”.
+- Música y sonidos personalizados.
+
+
+Estructura básica del proyecto
+
+- Menu/: Carpeta con el menú principal y la pantalla de créditos, ambos con efectos de partículas y transiciones suaves.
+- assets/: Imágenes, sprites, música y sonidos.
+- pruebaFinal.html, musiicBrothers.html, caminoAlDestino.html: Niveles y escenas del juego.
+- menuStyles.css, menuScript.js: Estilos y scripts para el menú y créditos.
+
+
+¿Cómo funciona?
+El usuario inicia en el menú, donde puede elegir jugar o ver los créditos.
+Al jugar, se presentan niveles con plataformas, enemigos y desafíos de esquivar.
+Los créditos y diálogos usan overlays y animaciones para una experiencia visual atractiva.
+Todo el proyecto es responsivo y funciona en navegadores modernos.
+
+
+HOSTING
+
+Netlify es una plataforma de hosting moderna para sitios web estáticos y aplicaciones front-end.
+Te permite:
+
+Subir tu proyecto (por ejemplo, arrastrando tu carpeta o conectando tu repo de GitHub).
+Publicar tu sitio gratis con HTTPS y dominio personalizado.
+Hacer deploys automáticos cada vez que actualizas tu código.
+Usar funciones extra como formularios, redirecciones, y más.
+En resumen:
+Netlify es una forma súper fácil y rápida de poner tu juego o web en línea, sin complicaciones técnicas. ¡Solo subes y listo!

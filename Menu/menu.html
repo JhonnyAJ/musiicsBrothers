@@ -1,0 +1,73 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ventana Fija</title>
+  <script>
+    function openFixedSizeWindow() {
+      const width = 800; // Ancho fijo
+      const height = 600; // Alto fijo
+      const left = (screen.width - width) / 2; // Centrar horizontalmente
+      const top = (screen.height - height) / 2; // Centrar verticalmente
+
+      window.open('musiicBrothers.html', 'fixedWindow', `width=${width},height=${height},left=${left},top=${top},resizable=no`);
+    }
+  </script>
+</head>
+<body onload="openFixedSizeWindow()">
+  <h1>Abriendo ventana con tamaño fijo...</h1>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musiic's Brothers</title>
+    <link rel="stylesheet" href="menuStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="particles-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+  
+  <div id="initial-overlay" class="initial-overlay">
+    <div class="initial-overlay-text">Haz clic para continuar</div>
+  </div>
+
+  <div id="story-overlay" class="story-overlay">
+    <div id="story-text" class="story-text"></div>
+  </div>
+
+  <div class="menu-container" id="menu-main">
+    <h1 class="game-title">Musiic's Brothers</h1>
+    <div class="menu-options">
+      <button id="play-button">Jugar</button>
+      <button id="credits-button">Créditos</button>
+    </div>
+  </div>
+
+  <div class="menu-container" id="menu-credits" style="display:none;">
+    <h1 class="game-title">Créditos</h1>
+    <div style="font-size:1.5em; margin: 30px 0; color: #fff; text-shadow: 0 0 10px #6a1b9a;">
+      <p><b>Desarrollo y música</b> </p>
+      <img class="credit-img" src="../assets/Creditos/nonox.png" alt="Desarrollador">
+      <p><b>Arte:</b></p>
+      <img class="credit-img" src="../assets/Creditos/saru.png" alt="Arte">
+
+    </div>
+        <h1 id="back-menu" class="game-title">Volver</h1>
+
+  </div>
+
+  <!-- Audio para la música de fondo -->
+  <audio id="background-music" loop>
+    <source src="../assets/sonidos/menu.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+
+  <script src="menuScript.js"></script>
+</body>
+</html>
