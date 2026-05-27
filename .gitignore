@@ -1,0 +1,20 @@
+# VS Code
+.vscode/*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Temporales
+*.tmp
+
+# Node (si en el futuro agrega herramientas)
+node_modules/
+
+# Python (por uv o scripts futuros)
+.venv/
+__pycache__/
+*.pyc
