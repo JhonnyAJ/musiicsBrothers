@@ -9,6 +9,14 @@ window.Game = {
     AssetsLoader.preload(() => {
       GameUI.init();
       GameInput.init();
+      GamePlayer.init();
+      GameAttack.init();
+      GameEnemy.init();
+      GameNPC.init();
+      GameDialogue.init();
+      GameChapter.init();
+      GameCollectibles.init();
+
       this.setChapter(this.state.chapter);
       this.setCheckpoint(this.state.checkpoint);
       this.updateCharge(0);
@@ -22,6 +30,7 @@ window.Game = {
   },
   setCheckpoint(index) {
     this.state.checkpoint = index;
+    GameChapter.setCheckpoint(index);
     GameUI.setCheckpoint(index);
   },
   updateCharge(value) {
@@ -40,13 +49,14 @@ window.Game = {
   },
   updateLoop() {
     const input = GameInput.state;
-    if (input.charge) {
-      const nextCharge = Math.min(100, this.state.charge + 0.5);
-      this.updateCharge(nextCharge);
-    }
-    if (input.attack && this.state.charge >= 20) {
+    GamePlayer.update(input);
+    GameAttack.update(input);
+    GameEnemy.update();
+    GameNPC.update();
+    this.updateCharge(GameAttack.getCharge());
+
+    if (input.attack && GameAttack.getCharge() === 0 && !input.charge) {
       console.log('Game: ataque mágico ejecutado.');
-      this.updateCharge(0);
     }
   }
 };

@@ -9,7 +9,13 @@ window.GameUI = {
     this.elements.dialogueNext = document.getElementById('dialogue-next');
 
     if (this.elements.dialogueNext) {
-      this.elements.dialogueNext.addEventListener('click', () => this.hideDialogue());
+      this.elements.dialogueNext.addEventListener('click', () => {
+        if (window.GameDialogue && typeof window.GameDialogue.next === 'function') {
+          window.GameDialogue.next();
+        } else {
+          this.hideDialogue();
+        }
+      });
     }
 
     console.log('GameUI: inicializado.');
