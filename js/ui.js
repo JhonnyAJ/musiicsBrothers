@@ -7,6 +7,8 @@ window.GameUI = {
     this.elements.dialoguePanel = document.getElementById('dialogue-panel');
     this.elements.dialogueText = document.getElementById('dialogue-text');
     this.elements.dialogueNext = document.getElementById('dialogue-next');
+    this.elements.gameLayer = document.getElementById('game-layer');
+    this.elements.stageMessage = document.querySelector('.stage-message');
 
     if (this.elements.dialogueNext) {
       this.elements.dialogueNext.addEventListener('click', () => {
@@ -19,6 +21,35 @@ window.GameUI = {
     }
 
     console.log('GameUI: inicializado.');
+  },
+  clearGameLayer() {
+    if (this.elements.gameLayer) {
+      this.elements.gameLayer.innerHTML = '';
+    }
+  },
+  renderGameLayer(entities) {
+    if (!this.elements.gameLayer) {
+      return;
+    }
+    this.clearGameLayer();
+
+    entities.forEach((entity) => {
+      const element = document.createElement('div');
+      element.className = `entity ${entity.className}`;
+      element.style.left = `${entity.x}px`;
+      element.style.top = `${entity.y}px`;
+      element.style.width = `${entity.width}px`;
+      element.style.height = `${entity.height}px`;
+      if (entity.active) {
+        element.classList.add('object-activated');
+      }
+      this.elements.gameLayer.appendChild(element);
+    });
+  },
+  hideStageMessage() {
+    if (this.elements.stageMessage) {
+      this.elements.stageMessage.classList.add('hidden');
+    }
   },
   setCharge(percent) {
     if (this.elements.charge) {

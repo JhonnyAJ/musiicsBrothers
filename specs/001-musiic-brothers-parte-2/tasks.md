@@ -6,15 +6,15 @@
 
 **Purpose**: Crear la estructura de archivos y los módulos base para la Parte 2.
 
-- [ ] T001 Create `musiic-brothers-parte-2.html` as the new feature entry page
-- [ ] T002 Create `css/game.css` for shared Parte 2 gameplay styles
-- [ ] T003 Create `css/dialogue.css` for NPC dialogue and narrative UI
-- [ ] T004 Create `css/responsive.css` for responsive layout and mobile support
-- [ ] T005 Create `js/main.js` to initialize the game and load core modules
-- [ ] T006 [P] Create `js/input.js` for keyboard and touch controls
-- [ ] T007 [P] Create `js/ui.js` for HUD, checkpoint indicators, portals and narrative messages
-- [ ] T008 [P] Create `js/assets-loader.js` for local asset loading from `assets/`
-- [ ] T009 [P] Organize local game assets under `assets/sprites/`, `assets/audio/` and `assets/backgrounds/`
+- [X] T001 Create `musiic-brothers-parte-2.html` as the new feature entry page
+- [X] T002 Create `css/game.css` for shared Parte 2 gameplay styles
+- [X] T003 Create `css/dialogue.css` for NPC dialogue and narrative UI
+- [X] T004 Create `css/responsive.css` for responsive layout and mobile support
+- [X] T005 Create `js/main.js` to initialize the game and load core modules
+- [X] T006 [P] Create `js/input.js` for keyboard and touch controls
+- [X] T007 [P] Create `js/ui.js` for HUD, checkpoint indicators, portals and narrative messages
+- [X] T008 [P] Create `js/assets-loader.js` for local asset loading from `assets/`
+- [X] T009 [P] Organize local game assets under `assets/sprites/`, `assets/audio/` and `assets/backgrounds/`
 
 ---
 
@@ -22,15 +22,15 @@
 
 **Purpose**: Sentar las bases de la lógica de juego, checkpoints y capítulos compartidos.
 
-- [ ] T010 [P] Create `js/player.js` skeleton with Milly state, movement and physics hooks
-- [ ] T011 [P] Create `js/attack.js` skeleton with charge, projectile creation and attack progression API
-- [ ] T012 [P] Create `js/enemy.js` skeleton with basic enemy entity and boss placeholders
-- [ ] T013 [P] Create `js/npc.js` skeleton with NPC entity, proximity trigger and interaction API
-- [ ] T014 [P] Create `js/dialogue.js` skeleton with dialogue panel API and line progression
-- [ ] T015 [P] Create `js/chapter.js` skeleton with chapter definitions, objectives and checkpoint APIs
-- [ ] T016 [P] Create `js/collectibles.js` skeleton with fragment entity registration and pickup callbacks
-- [ ] T017 [P] Wire `js/main.js` to initialize `js/input.js`, `js/player.js`, `js/attack.js`, `js/enemy.js`, `js/npc.js`, `js/dialogue.js`, `js/chapter.js`, `js/collectibles.js` and `js/ui.js`
-- [ ] T018 [P] Add checkpoint system support in `js/chapter.js` and exposed status in `js/ui.js`
+- [X] T010 [P] Create `js/player.js` skeleton with Milly state, movement and physics hooks
+- [X] T011 [P] Create `js/attack.js` skeleton with charge, projectile creation and attack progression API
+- [X] T012 [P] Create `js/enemy.js` skeleton with basic enemy entity and boss placeholders
+- [X] T013 [P] Create `js/npc.js` skeleton with NPC entity, proximity trigger and interaction API
+- [X] T014 [P] Create `js/dialogue.js` skeleton with dialogue panel API and line progression
+- [X] T015 [P] Create `js/chapter.js` skeleton with chapter definitions, objectives and checkpoint APIs
+- [X] T016 [P] Create `js/collectibles.js` skeleton with fragment entity registration and pickup callbacks
+- [X] T017 [P] Wire `js/main.js` to initialize `js/input.js`, `js/player.js`, `js/attack.js`, `js/enemy.js`, `js/npc.js`, `js/dialogue.js`, `js/chapter.js`, `js/collectibles.js` and `js/ui.js`
+- [X] T018 [P] Add checkpoint system support in `js/chapter.js` and exposed status in `js/ui.js`
 
 ---
 
@@ -40,14 +40,14 @@
 
 **Independent Test**: Abrir Capítulo 1, mover a Milly, cargar energía y disparar un proyectil que golpee un enemigo o active un objeto.
 
-- [ ] T019 [US1] Implement Milly movement, jump and gravity response in `js/player.js`
-- [ ] T020 [P] [US1] Implement control mapping for movement, jump, charge and attack in `js/input.js`
-- [ ] T021 [P] [US1] Implement energy charge, projectile spawn and basic hit detection in `js/attack.js`
-- [ ] T022 [US1] Implement basic enemy damage and defeat behavior in `js/enemy.js`
-- [ ] T023 [US1] Implement projectile-triggered object activation in `js/chapter.js`
-- [ ] T024 [US1] Add Capítulo 1 layout and initial game wiring in `musiic-brothers-parte-2.html`
-- [ ] T025 [P] [US1] Add charge meter and basic HUD display in `js/ui.js`
-- [ ] T026 [P] [US1] Style Milly, projectile, enemy and HUD elements in `css/game.css`
+- [X] T019 [US1] Implement Milly movement, jump and gravity response in `js/player.js`
+- [X] T020 [P] [US1] Implement control mapping for movement, jump, charge and attack in `js/input.js`
+- [X] T021 [P] [US1] Implement energy charge, projectile spawn and basic hit detection in `js/attack.js`
+- [X] T022 [US1] Implement basic enemy damage and defeat behavior in `js/enemy.js`
+- [X] T023 [US1] Implement projectile-triggered object activation in `js/chapter.js`
+- [X] T024 [US1] Add Capítulo 1 layout and initial game wiring in `musiic-brothers-parte-2.html`
+- [X] T025 [P] [US1] Add charge meter and basic HUD display in `js/ui.js`
+- [X] T026 [P] [US1] Style Milly, projectile, enemy and HUD elements in `css/game.css`
 
 ---
 

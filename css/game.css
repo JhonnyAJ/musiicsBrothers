@@ -41,6 +41,45 @@ body.game-page {
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
 }
 
+.game-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.entity {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.player {
+  background: linear-gradient(135deg, #b07cff, #8b5cff);
+  box-shadow: 0 0 12px rgba(155, 100, 255, 0.5);
+}
+
+.projectile {
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #8affc8 0%, #2ce07f 100%);
+  box-shadow: 0 0 10px rgba(44, 224, 127, 0.6);
+}
+
+.enemy {
+  background: linear-gradient(135deg, #ff6f6f 0%, #d13f3f 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.activatable {
+  background: linear-gradient(135deg, #ffd76f 0%, #ffb93f 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.object-activated {
+  background: linear-gradient(135deg, #7cf9ff 0%, #4fc6ff 100%);
+}
+
 .hud {
   display: flex;
   flex-direction: column;

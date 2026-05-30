@@ -6,6 +6,7 @@ window.GameEnemy = {
   init() {
     this.state.enemies = [];
     this.state.boss = null;
+    this.spawnEnemy(620, 304);
     console.log('GameEnemy: inicializado.');
   },
   spawnEnemy(x, y) {
@@ -19,5 +20,16 @@ window.GameEnemy = {
   },
   getEnemies() {
     return this.state.enemies;
+  },
+  checkProjectileCollisions(projectiles) {
+    this.state.enemies = this.state.enemies.filter((enemy) => {
+      const hit = projectiles.some((projectile) => {
+        return projectile.x < enemy.x + enemy.width &&
+               projectile.x + projectile.width > enemy.x &&
+               projectile.y < enemy.y + enemy.height &&
+               projectile.y + projectile.height > enemy.y;
+      });
+      return !hit;
+    });
   }
 };

@@ -14,6 +14,18 @@ Desktop.ini
 # Node (si en el futuro agrega herramientas)
 node_modules/
 
+# Build / distribution
+dist/
+build/
+coverage/
+
+# Environment files
+.env*
+
+# macOS / editor
+.DS_Store
+.idea/
+
 # Python (por uv o scripts futuros)
 .venv/
 __pycache__/
