@@ -4,7 +4,8 @@ window.GameInput = {
     right: false,
     jump: false,
     charge: false,
-    attack: false
+    attack: false,
+    interact: false
   },
   init() {
     document.addEventListener('keydown', this.onKeyDown.bind(this));
@@ -33,6 +34,10 @@ window.GameInput = {
       case 'KeyF':
         this.state.attack = true;
         break;
+      case 'KeyQ':
+      case 'Enter':
+        this.state.interact = true;
+        break;
     }
   },
   onKeyUp(event) {
@@ -56,6 +61,10 @@ window.GameInput = {
         break;
       case 'KeyF':
         this.state.attack = false;
+        break;
+      case 'KeyQ':
+      case 'Enter':
+        this.state.interact = false;
         break;
     }
   }

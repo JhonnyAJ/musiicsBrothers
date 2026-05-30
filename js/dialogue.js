@@ -2,12 +2,14 @@ window.GameDialogue = {
   state: {
     lines: [],
     currentLine: 0,
-    active: false
+    active: false,
+    onComplete: null
   },
   init() {
     this.state.lines = [];
     this.state.currentLine = 0;
     this.state.active = false;
+    this.state.onComplete = null;
     console.log('GameDialogue: inicializado.');
   },
   setLines(lines) {
@@ -30,6 +32,10 @@ window.GameDialogue = {
     } else {
       this.state.active = false;
       GameUI.hideDialogue();
+      if (typeof this.state.onComplete === 'function') {
+        this.state.onComplete();
+        this.state.onComplete = null;
+      }
     }
   }
 };

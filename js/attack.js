@@ -8,6 +8,17 @@ window.GameAttack = {
   init() {
     console.log('GameAttack: inicializado.');
   },
+  getAttackModifiers() {
+    if (!window.GameChapter) {
+      return { speedBonus: 0, powerBonus: 0, sizeBonus: 0 };
+    }
+    const chapterIndex = window.GameChapter.state.currentIndex || 0;
+    return {
+      speedBonus: chapterIndex,
+      powerBonus: chapterIndex * 10,
+      sizeBonus: chapterIndex * 2
+    };
+  },
   update(input, playerState) {
     if (input.charge) {
       this.state.isCharging = true;
@@ -36,19 +47,22 @@ window.GameAttack = {
     });
   },
   fireProjectile(playerState, power) {
-    const speed = 5 + Math.floor(power / 20);
+    const modifiers = this.getAttackModifiers();
+    const speed = 5 + Math.floor(power / 20) + modifiers.speedBonus;
+    const projectileWidth = 16 + modifiers.sizeBonus;
+    const projectileHeight = 16 + modifiers.sizeBonus;
     const startX = playerState.x + playerState.width;
-    const startY = playerState.y + playerState.height / 2 - 8;
+    const startY = playerState.y + playerState.height / 2 - projectileHeight / 2;
 
     this.state.projectiles.push({
       x: startX,
       y: startY,
       vx: speed,
-      power,
-      width: 16,
-      height: 16
+      power: power + modifiers.powerBonus,
+      width: projectileWidth,
+      height: projectileHeight
     });
-    console.log('GameAttack: proyectil lanzado con carga', power);
+    console.log('GameAttack: proyectil lanzado con carga', power, 'modificado a', power + modifiers.powerBonus);
   },
   getCharge() {
     return this.state.chargeLevel;

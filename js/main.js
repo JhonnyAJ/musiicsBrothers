@@ -10,11 +10,11 @@ window.Game = {
       GameUI.init();
       GameInput.init();
       GamePlayer.init();
+      GameChapter.init();
       GameAttack.init();
       GameEnemy.init();
       GameNPC.init();
       GameDialogue.init();
-      GameChapter.init();
       GameCollectibles.init();
 
       this.setChapter(this.state.chapter);
@@ -60,8 +60,9 @@ window.Game = {
       console.log('Game: objeto activado con proyectil.');
     }
 
+    GameChapter.checkPortalEntry(playerState);
     GameEnemy.update();
-    GameNPC.update();
+    GameNPC.update(input, playerState);
     this.updateCharge(GameAttack.getCharge());
 
     GameUI.renderGameLayer([
@@ -86,6 +87,20 @@ window.Game = {
         height: enemy.height,
         className: 'enemy'
       })),
+      ...(GameEnemy.getBoss() ? [{
+        x: GameEnemy.getBoss().x,
+        y: GameEnemy.getBoss().y,
+        width: GameEnemy.getBoss().width,
+        height: GameEnemy.getBoss().height,
+        className: 'boss'
+      }] : []),
+      ...GameChapter.getNPCs().map((npc) => ({
+        x: npc.x,
+        y: npc.y,
+        width: npc.width,
+        height: npc.height,
+        className: 'npc'
+      })),
       (() => {
         const object = GameChapter.getActiveObject();
         if (!object) {
@@ -98,6 +113,19 @@ window.Game = {
           height: object.height,
           className: 'activatable',
           active: object.activated
+        }];
+      })(),
+      (() => {
+        const portal = GameChapter.getPortal();
+        if (!portal) {
+          return [];
+        }
+        return [{
+          x: portal.x,
+          y: portal.y,
+          width: portal.width,
+          height: portal.height,
+          className: 'portal'
         }];
       })()
     ].flat());

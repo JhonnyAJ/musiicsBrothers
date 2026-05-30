@@ -1,5 +1,6 @@
 window.GameUI = {
   elements: {},
+  messageTimeout: null,
   init() {
     this.elements.charge = document.getElementById('hud-charge');
     this.elements.checkpoint = document.getElementById('hud-checkpoint');
@@ -9,6 +10,8 @@ window.GameUI = {
     this.elements.dialogueNext = document.getElementById('dialogue-next');
     this.elements.gameLayer = document.getElementById('game-layer');
     this.elements.stageMessage = document.querySelector('.stage-message');
+    this.elements.interactionPrompt = document.getElementById('interaction-prompt');
+    this.elements.chapterOverlay = document.getElementById('chapter-overlay');
 
     if (this.elements.dialogueNext) {
       this.elements.dialogueNext.addEventListener('click', () => {
@@ -51,6 +54,30 @@ window.GameUI = {
       this.elements.stageMessage.classList.add('hidden');
     }
   },
+  showStageMessage(message, timeout = 2500) {
+    if (this.elements.stageMessage) {
+      this.elements.stageMessage.textContent = message;
+      this.elements.stageMessage.classList.remove('hidden');
+      if (this.messageTimeout) {
+        clearTimeout(this.messageTimeout);
+      }
+      this.messageTimeout = setTimeout(() => {
+        this.hideStageMessage();
+        this.messageTimeout = null;
+      }, timeout);
+    }
+  },
+  showInteractionPrompt(message) {
+    if (this.elements.interactionPrompt) {
+      this.elements.interactionPrompt.textContent = message;
+      this.elements.interactionPrompt.classList.remove('hidden');
+    }
+  },
+  hideInteractionPrompt() {
+    if (this.elements.interactionPrompt) {
+      this.elements.interactionPrompt.classList.add('hidden');
+    }
+  },
   setCharge(percent) {
     if (this.elements.charge) {
       this.elements.charge.textContent = `Carga: ${Math.round(percent)}%`;
@@ -75,6 +102,21 @@ window.GameUI = {
   hideDialogue() {
     if (this.elements.dialoguePanel) {
       this.elements.dialoguePanel.classList.add('hidden');
+    }
+  },
+  showChapterTransition(message, timeout = 2200) {
+    if (!this.elements.chapterOverlay) {
+      return;
+    }
+    this.elements.chapterOverlay.textContent = message;
+    this.elements.chapterOverlay.classList.remove('hidden');
+    setTimeout(() => {
+      this.hideChapterTransition();
+    }, timeout);
+  },
+  hideChapterTransition() {
+    if (this.elements.chapterOverlay) {
+      this.elements.chapterOverlay.classList.add('hidden');
     }
   }
 };

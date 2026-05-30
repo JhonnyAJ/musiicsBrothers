@@ -57,13 +57,13 @@
 
 **Independent Test**: Entrar en la Aldea Perdida, hablar con un NPC y ver un diálogo funcional que actualice objetivos.
 
-- [ ] T027 [US2] Implement NPC interaction detection and talk trigger in `js/npc.js`
-- [ ] T028 [US2] Implement dialogue panel rendering and line progression in `js/dialogue.js`
-- [ ] T029 [US2] Add dialogue container and interaction prompt to `musiic-brothers-parte-2.html`
-- [ ] T030 [US2] Define NPC dialogue scripts for Aldea Perdida and Bosque de los Ecos in `js/chapter.js`
-- [ ] T031 [US2] Update `js/chapter.js` to advance objectives and reveal story clues after dialogue
-- [ ] T032 [P] [US2] Style dialogue windows and medieval text presentation in `css/dialogue.css`
-- [ ] T033 [P] [US2] Ensure NPC dialogue uses understandable medieval fantasy Spanish in narrative copy files
+- [X] T027 [US2] Implement NPC interaction detection and talk trigger in `js/npc.js`
+- [X] T028 [US2] Implement dialogue panel rendering and line progression in `js/dialogue.js`
+- [X] T029 [US2] Add dialogue container and interaction prompt to `musiic-brothers-parte-2.html`
+- [X] T030 [US2] Define NPC dialogue scripts for Aldea Perdida and Bosque de los Ecos in `js/chapter.js`
+- [X] T031 [US2] Update `js/chapter.js` to advance objectives and reveal story clues after dialogue
+- [X] T032 [P] [US2] Style dialogue windows and medieval text presentation in `css/dialogue.css`
+- [X] T033 [P] [US2] Ensure NPC dialogue uses understandable medieval fantasy Spanish in narrative copy files
 
 ---
 
@@ -73,14 +73,14 @@
 
 **Independent Test**: Jugar los tres capítulos hasta su cierre y verificar la progresión de historia, checkpoints y el jefe final.
 
-- [ ] T034 [US3] Implement chapter definitions for Aldea Perdida, Bosque de los Ecos and Torre del Tiempo in `js/chapter.js`
-- [ ] T035 [US3] Implement chapter completion conditions, checkpoints and transition handling in `js/chapter.js`
-- [ ] T036 [US3] Implement narrative reveal events for Torre del Tiempo and time-period discovery in `js/chapter.js`
-- [ ] T037 [US3] Implement Capítulo 3 final boss that serves Rey Monster in `js/enemy.js`
-- [ ] T038 [US3] Implement attack progression through chapters in `js/attack.js` with chapter-based enhancements
-- [ ] T039 [US3] Implement chapter-end portal activation, final sequence cues and milestone messages in `js/ui.js`
-- [ ] T040 [US3] Add chapter transition overlay and narrative messages in `musiic-brothers-parte-2.html`
-- [ ] T041 [P] [US3] Ensure Rey Monster is presented as the distant threat and not a direct Part 2 fight in narrative text
+- [X] T034 [US3] Implement chapter definitions for Aldea Perdida, Bosque de los Ecos and Torre del Tiempo in `js/chapter.js`
+- [X] T035 [US3] Implement chapter completion conditions, checkpoints and transition handling in `js/chapter.js`
+- [X] T036 [US3] Implement narrative reveal events for Torre del Tiempo and time-period discovery in `js/chapter.js`
+- [X] T037 [US3] Implement Capítulo 3 final boss that serves Rey Monster in `js/enemy.js`
+- [X] T038 [US3] Implement attack progression through chapters in `js/attack.js` with chapter-based enhancements
+- [X] T039 [US3] Implement chapter-end portal activation, final sequence cues and milestone messages in `js/ui.js`
+- [X] T040 [US3] Add chapter transition overlay and narrative messages in `musiic-brothers-parte-2.html`
+- [X] T041 [P] [US3] Ensure Rey Monster is presented as the distant threat and not a direct Part 2 fight in narrative text
 
 ---
 

@@ -71,6 +71,11 @@ body.game-page {
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
+.npc {
+  background: linear-gradient(135deg, #6cd4ff 0%, #3a8cff 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
 .activatable {
   background: linear-gradient(135deg, #ffd76f 0%, #ffb93f 100%);
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -78,6 +83,40 @@ body.game-page {
 
 .object-activated {
   background: linear-gradient(135deg, #7cf9ff 0%, #4fc6ff 100%);
+}
+
+.portal {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(160, 100, 255, 0.8) 0%, rgba(90, 30, 140, 0.85) 100%);
+  box-shadow: 0 0 18px rgba(150, 80, 255, 0.55);
+  border: 2px solid rgba(255, 207, 255, 0.55);
+}
+
+.boss {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #8f1f5e 0%, #2b0d24 100%);
+  box-shadow: 0 0 16px rgba(255, 95, 160, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.chapter-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 3, 18, 0.85);
+  color: #f9f3d8;
+  font-size: 2rem;
+  text-align: center;
+  padding: 24px;
+  z-index: 20;
+}
+
+.chapter-overlay.hidden {
+  display: none;
 }
 
 .hud {
