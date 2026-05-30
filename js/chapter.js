@@ -10,6 +10,10 @@ window.GameChapter = {
         name: 'Aldea Perdida',
         checkpointPositions: [1, 2],
         activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        fragments: [
+          { id: 'a_frag_1', x: 300, y: 280, width: 16, height: 16 },
+          { id: 'a_frag_2', x: 420, y: 280, width: 16, height: 16 }
+        ],
         portal: { x: 740, y: 320, width: 40, height: 40, active: false },
         npcs: [
           {
@@ -33,6 +37,10 @@ window.GameChapter = {
         name: 'Bosque de los Ecos',
         checkpointPositions: [1, 2],
         activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        fragments: [
+          { id: 'b_frag_1', x: 260, y: 260, width: 16, height: 16 },
+          { id: 'b_frag_2', x: 740, y: 260, width: 16, height: 16 }
+        ],
         portal: { x: 740, y: 320, width: 40, height: 40, active: false },
         npcs: [
           {
@@ -56,6 +64,9 @@ window.GameChapter = {
         name: 'Torre del Tiempo',
         checkpointPositions: [1, 2],
         activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        fragments: [
+          { id: 't_frag_1', x: 680, y: 240, width: 16, height: 16 }
+        ],
         portal: { x: 740, y: 320, width: 40, height: 40, active: false },
         npcs: []
       }

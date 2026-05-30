@@ -90,11 +90,11 @@
 
 **Independent Test**: Encontrar un fragmento oculto y verificar que se registra en el contador de colección.
 
-- [ ] T042 [US4] Implement temporal fragment entities and pickup detection in `js/collectibles.js`
-- [ ] T043 [P] [US4] Add fragment count display and collection feedback in `js/ui.js`
-- [ ] T044 [US4] Place hidden fragments in chapter definitions in `js/chapter.js`
-- [ ] T045 [US4] Add collection effect styling for fragments in `css/game.css`
-- [ ] T046 [US4] Persist fragment collection state during the current session in `js/collectibles.js`
+ - [X] T042 [US4] Implement temporal fragment entities and pickup detection in `js/collectibles.js`
+ - [X] T043 [P] [US4] Add fragment count display and collection feedback in `js/ui.js`
+ - [X] T044 [US4] Place hidden fragments in chapter definitions in `js/chapter.js`
+ - [X] T045 [US4] Add collection effect styling for fragments in `css/game.css`
+ - [X] T046 [US4] Persist fragment collection state during the current session in `js/collectibles.js`
 
 ---
 
@@ -102,12 +102,12 @@
 
 **Purpose**: Pulir la experiencia completa, asegurar responsividad y cerrar el feature con validación.
 
-- [ ] T047 [P] Refactor shared game wiring and remove duplication in `js/main.js`
-- [ ] T048 [P] Ensure responsive layout and mobile-friendly behavior in `css/responsive.css`
-- [ ] T049 [ ] Playtest Capítulo 1, Capítulo 2 and Capítulo 3 in browser and verify story progression
-- [ ] T050 [ ] Validate NPC dialogues, checkpoint behavior, attack progression and boss combat across all chapters
-- [ ] T051 [ ] Validate collectible fragment behavior and session progress display
-- [ ] T052 [ ] Update `specs/001-musiic-brothers-parte-2/plan.md` with implementation notes, actual file paths and any architectural changes
+ - [X] T047 [P] Refactor shared game wiring and remove duplication in `js/main.js`
+ - [X] T048 [P] Ensure responsive layout and mobile-friendly behavior in `css/responsive.css`
+ - [X] T049 [X] Playtest Capítulo 1, Capítulo 2 and Capítulo 3 in browser and verify story progression
+ - [X] T050 [X] Validate NPC dialogues, checkpoint behavior, attack progression and boss combat across all chapters
+ - [X] T051 [X] Validate collectible fragment behavior and session progress display
+ - [X] T052 [X] Update `specs/001-musiic-brothers-parte-2/plan.md` with implementation notes, actual file paths and any architectural changes
 
 ---
 

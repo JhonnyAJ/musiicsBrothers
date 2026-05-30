@@ -12,6 +12,7 @@ window.GameUI = {
     this.elements.stageMessage = document.querySelector('.stage-message');
     this.elements.interactionPrompt = document.getElementById('interaction-prompt');
     this.elements.chapterOverlay = document.getElementById('chapter-overlay');
+    this.elements.fragments = document.getElementById('hud-fragments');
 
     if (this.elements.dialogueNext) {
       this.elements.dialogueNext.addEventListener('click', () => {
@@ -91,6 +92,11 @@ window.GameUI = {
   setChapter(name) {
     if (this.elements.chapter) {
       this.elements.chapter.textContent = `Capítulo: ${name}`;
+    }
+  },
+  setFragmentsCount(count) {
+    if (this.elements.fragments) {
+      this.elements.fragments.textContent = `Fragmentos: ${count}`;
     }
   },
   showDialogue(message) {

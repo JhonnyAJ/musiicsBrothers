@@ -155,3 +155,16 @@ assets/
 ## Complexity Tracking
 
 No se requiere un cambio de arquitectura mayor ni dependencias nuevas. El plan respeta la constitución manteniendo el juego como una aplicación web estática, con módulos claros para la mecánica de capítulo, narración y control de estado.
+
+## Implementation Notes (automated run)
+
+- Phase 6 (collectibles) implemented: `js/collectibles.js` added with `sessionStorage` persistence, UI HUD `hud-fragments` and styles in `css/game.css`.
+- Phase 7 (polish) changes applied:
+  - `js/main.js`: small refactor to extract entity assembly helper to reduce duplication.
+  - `css/responsive.css`: minor touch-action and mobile size tweaks.
+  - Automated playtests executed to validate dialogues, chapter progression, boss hits and collectible persistence.
+
+Files changed during implementation:
+- `js/collectibles.js`, `js/chapter.js`, `js/main.js`, `js/ui.js`, `css/game.css`, `css/responsive.css`, `musiic-brothers-parte-2.html`, `specs/.../tasks.md`
+
+Notes: The repository contains `.specify` scripts; an initial `check-prerequisites` run failed due to branch-naming conventions but did not block implementation. Manual validation and automated browser tests were used to confirm behavior.

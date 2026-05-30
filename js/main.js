@@ -28,6 +28,18 @@ window.Game = {
   setChapter(name) {
     this.state.chapter = name;
     GameUI.setChapter(name);
+    // Load fragments for the current chapter into collectibles
+    if (window.GameCollectibles && typeof GameChapter.getCurrentChapter === 'function') {
+      // Reset collectibles fragments and load chapter fragments
+      GameCollectibles.state.fragments = [];
+      const frags = GameChapter.getCurrentChapter().fragments || [];
+      frags.forEach((f) => {
+        GameCollectibles.addFragment(Object.assign({}, f));
+      });
+      if (GameUI && typeof GameUI.setFragmentsCount === 'function') {
+        GameUI.setFragmentsCount(GameCollectibles.getCollectedCount());
+      }
+    }
   },
   setCheckpoint(index) {
     this.state.checkpoint = index;
@@ -61,74 +73,32 @@ window.Game = {
     }
 
     GameChapter.checkPortalEntry(playerState);
+    // Update collectibles (pickup detection)
+    if (window.GameCollectibles && typeof GameCollectibles.update === 'function') {
+      GameCollectibles.update(playerState);
+    }
+
     GameEnemy.update();
     GameNPC.update(input, playerState);
     this.updateCharge(GameAttack.getCharge());
 
-    GameUI.renderGameLayer([
-      {
-        x: playerState.x,
-        y: playerState.y,
-        width: playerState.width,
-        height: playerState.height,
-        className: 'player'
-      },
-      ...GameAttack.state.projectiles.map((projectile) => ({
-        x: projectile.x,
-        y: projectile.y,
-        width: projectile.width,
-        height: projectile.height,
-        className: 'projectile'
-      })),
-      ...GameEnemy.getEnemies().map((enemy) => ({
-        x: enemy.x,
-        y: enemy.y,
-        width: enemy.width,
-        height: enemy.height,
-        className: 'enemy'
-      })),
-      ...(GameEnemy.getBoss() ? [{
-        x: GameEnemy.getBoss().x,
-        y: GameEnemy.getBoss().y,
-        width: GameEnemy.getBoss().width,
-        height: GameEnemy.getBoss().height,
-        className: 'boss'
-      }] : []),
-      ...GameChapter.getNPCs().map((npc) => ({
-        x: npc.x,
-        y: npc.y,
-        width: npc.width,
-        height: npc.height,
-        className: 'npc'
-      })),
-      (() => {
-        const object = GameChapter.getActiveObject();
-        if (!object) {
-          return [];
-        }
-        return [{
-          x: object.x,
-          y: object.y,
-          width: object.width,
-          height: object.height,
-          className: 'activatable',
-          active: object.activated
-        }];
-      })(),
-      (() => {
-        const portal = GameChapter.getPortal();
-        if (!portal) {
-          return [];
-        }
-        return [{
-          x: portal.x,
-          y: portal.y,
-          width: portal.width,
-          height: portal.height,
-          className: 'portal'
-        }];
-      })()
-    ].flat());
+    const buildEntities = () => {
+      const entities = [];
+      entities.push({ x: playerState.x, y: playerState.y, width: playerState.width, height: playerState.height, className: 'player' });
+      entities.push(...GameAttack.state.projectiles.map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'projectile' })));
+      entities.push(...GameEnemy.getEnemies().map((e) => ({ x: e.x, y: e.y, width: e.width, height: e.height, className: 'enemy' })));
+      const boss = GameEnemy.getBoss();
+      if (boss) entities.push({ x: boss.x, y: boss.y, width: boss.width, height: boss.height, className: 'boss' });
+      entities.push(...GameChapter.getNPCs().map((npc) => ({ x: npc.x, y: npc.y, width: npc.width, height: npc.height, className: 'npc' })));
+      const object = GameChapter.getActiveObject();
+      if (object) entities.push({ x: object.x, y: object.y, width: object.width, height: object.height, className: 'activatable', active: object.activated });
+      const portal = GameChapter.getPortal();
+      if (portal) entities.push({ x: portal.x, y: portal.y, width: portal.width, height: portal.height, className: 'portal' });
+      entities.push(...GameCollectibles.getFragments().filter(f => !f.collected).map((f) => ({ x: f.x, y: f.y, width: f.width, height: f.height, className: 'fragment' })));
+      return entities;
+    };
+
+    GameUI.renderGameLayer(buildEntities());
   }
 };
 

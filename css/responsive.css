@@ -36,3 +36,13 @@
     font-size: 0.95rem;
   }
 }
+
+/* Mobile improvements: ensure game canvas and layer behave on touch devices */
+.game-canvas {
+  touch-action: none;
+}
+
+@media (max-width: 420px) {
+  .game-canvas { min-height: 50vh; }
+  .hud { font-size: 0.92rem; }
+}
