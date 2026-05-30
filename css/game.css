@@ -1,0 +1,61 @@
+/* Game styles for Musiic Brothers - Parte 2 */
+:root {
+  color-scheme: light dark;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #121212;
+  color: #f2f2f2;
+}
+
+body.game-page {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #2a2a3a 0%, #090912 70%);
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  min-height: 100vh;
+  gap: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.game-canvas {
+  background: #0b0b15 url('../assets/fondo.jpg') center / cover no-repeat;
+  border: 2px solid #5a5a8a;
+  border-radius: 16px;
+  min-height: 80vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dcdcdc;
+  font-size: 1.2rem;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.hud {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(12, 12, 22, 0.88);
+  padding: 16px;
+  border: 1px solid #36364d;
+  border-radius: 16px;
+  min-height: 220px;
+}
+
+.hud-item {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8f8ff;
+}

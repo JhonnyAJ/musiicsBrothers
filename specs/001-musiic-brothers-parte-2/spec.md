@@ -53,8 +53,10 @@ El jugador debe avanzar por los tres capítulos conectados y comprender que las 
 
 1. **Given** que el jugador completa el Capítulo 1, **When** alcanza el final, **Then** se revela la existencia de la Torre del Tiempo.
 2. **Given** que el jugador completa el Capítulo 2, **When** llega al final del bosque, **Then** obtiene acceso a la Torre del Tiempo.
-3. **Given** que el jugador comienza el Capítulo 3, **When** alcanza una ubicación clave en la Torre del Tiempo, **Then** descubre que está en otro período de tiempo.
-4. **Given** que el jugador completa el Capítulo 3, **When** derrota el jefe final, **Then** descubre que Millyo sigue con vida y se abre un nuevo portal.
+3. **Given** que el jugador pierde en un capítulo, **When** reinicia desde el menú de reintento, **Then** vuelve a aparecer en el último checkpoint alcanzado.
+4. **Given** que el jugador avanza al Capítulo 2, **When** usa el ataque mágico, **Then** el ataque muestra una mejora observable respecto al Capítulo 1.
+5. **Given** que el jugador comienza el Capítulo 3, **When** alcanza una ubicación clave en la Torre del Tiempo, **Then** descubre que está en otro período de tiempo.
+6. **Given** que el jugador completa el Capítulo 3, **When** derrota el jefe final, **Then** descubre que Millyo sigue con vida y se abre un nuevo portal.
 
 ---
 
@@ -139,10 +141,21 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **SC-005**: El juego must incluir al menos un NPC interactivo en la Aldea Perdida y otro en el Bosque de los Ecos.
 - **SC-006**: La narrativa principal de la Parte 2 must completarse con el descubrimiento de la manipulación temporal y la revelación de que Millyo sigue vivo.
 - **SC-007**: Al finalizar el Capítulo 3, must activarse un portal que deje claro que la historia continúa.
+- **SC-008**: El juego must permitir reiniciar desde el último checkpoint dentro de un capítulo tras perder.
+- **SC-009**: El ataque mágico must mostrar una progresión observable entre los Capítulos 1, 2 y 3.
+- **SC-010**: El Capítulo 3 must incluir un jefe final subordinado a Rey Monster, sin que Rey Monster sea combatido directamente.
+- **SC-011**: El jugador must descubrir mediante la narrativa que Milly está en otro período temporal.
+- **SC-012**: Los diálogos de NPC must presentarse en castellano de fantasía medieval comprensible.
+
+## Dependencies
+
+- El juego no debe usar librerías externas ni frameworks de terceros.
+- Todos los recursos deben cargarse localmente desde `assets/`.
+- La experiencia debe ser ejecutable en el navegador sin servidor.
 
 ## Assumptions
 
-- El proyecto seguirá usando HTML, CSS y JavaScript puro, igual que la primera entrega.
+- La solución se basará en la arquitectura web estática actual del proyecto, manteniendo la experiencia sin introducir nuevos frameworks ni motores externos.
 - La arquitectura actual del juego (pantallas HTML, assets locales, lógica embedida en páginas) es reutilizable para la nueva historia.
 - La ambientación medieval se implementará dentro del estilo pixel art existente y no requerirá gráficos de alta resolución.
 - No se implementarán mecánicas de progreso online o de tecnología moderna dentro de la narrativa medieval.

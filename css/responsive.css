@@ -1,0 +1,38 @@
+/* Responsive layout for smaller screens */
+@media (max-width: 950px) {
+  .game-container {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .hud {
+    min-height: auto;
+    position: relative;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .game-container {
+    gap: 10px;
+  }
+
+  .game-canvas {
+    min-height: 60vh;
+  }
+
+  .hud {
+    padding: 12px;
+  }
+
+  .dialogue-panel {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    padding: 14px;
+  }
+
+  .dialogue-text {
+    font-size: 0.95rem;
+  }
+}
