@@ -53,7 +53,8 @@ El jugador debe avanzar por los tres capítulos conectados y comprender que las 
 
 1. **Given** que el jugador completa el Capítulo 1, **When** alcanza el final, **Then** se revela la existencia de la Torre del Tiempo.
 2. **Given** que el jugador completa el Capítulo 2, **When** llega al final del bosque, **Then** obtiene acceso a la Torre del Tiempo.
-3. **Given** que el jugador completa el Capítulo 3, **When** derrota el jefe final, **Then** descubre que Millyo sigue con vida y se abre un nuevo portal.
+3. **Given** que el jugador comienza el Capítulo 3, **When** alcanza una ubicación clave en la Torre del Tiempo, **Then** descubre que está en otro período de tiempo.
+4. **Given** que el jugador completa el Capítulo 3, **When** derrota el jefe final, **Then** descubre que Millyo sigue con vida y se abre un nuevo portal.
 
 ---
 
@@ -78,6 +79,26 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - Qué pasa si un proyectil mágico no encuentra objetivo y atraviesa el escenario.
 - Cómo manejar la transición si el jugador reinicia un capítulo tras perder.
 
+## Narrative Structure
+
+### Chapter 1 - The Lost Village
+- Milly llega a una aldea medieval perdida y aprende las mecánicas básicas de movimiento, salto, carga de energía y ataque mágico.
+- El capítulo introduce al primer NPC y ofrece la primera pista sobre la manipulación temporal.
+- El capítulo finaliza con la revelación de que existe una Torre del Tiempo en el horizonte.
+
+### Chapter 2 - Forest of Echoes
+- Milly explora el Bosque de los Ecos, un lugar donde se perciben fragmentos de otro tiempo y la percepción se distorsiona.
+- Los NPCs y el entorno amplían la atmósfera medieval fantástica y las pistas sobre el viaje temporal.
+- El ataque mágico de Milly progresa con un nuevo efecto o interacción que demuestra su evolución.
+- El capítulo concluye con el acceso a la Torre del Tiempo.
+
+### Chapter 3 - Time Tower
+- Milly asciende la Torre del Tiempo y se enfrenta a un jefe final que sirve a Rey Monster.
+- Ella descubre que está en otro período de tiempo y que la amenaza de Rey Monster opera desde la distancia.
+- El capítulo termina con la activación de un portal y la revelación de que Millyo sigue vivo.
+
+> Nota: Rey Monster se menciona como la fuerza detrás de los eventos, pero no se le combate directamente en la Parte 2.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -90,9 +111,13 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **FR-006**: El juego MUST incluir al menos tres capítulos jugables con objetivos claros y resultados narrativos definidos.
 - **FR-007**: El sistema MUST introducir NPC interactivos en el Capítulo 1 y permitir al menos una conversación significativa en cada capítulo.
 - **FR-008**: El juego MUST incluir coleccionables de "Fragmentos Temporales" que recompensen la exploración.
-- **FR-009**: El juego MUST mantener el estilo visual pixel art y la arquitectura actual, reutilizando sistemas existentes cuando sea posible.
-- **FR-010**: El juego MUST evitar introducir tecnologías modernas dentro de la ambientación medieval.
-- **FR-011**: El juego MUST mantener el tono y la identidad de Musiic Brothers, incluyendo continuidad narrativa con la primera entrega.
+- **FR-009**: El sistema MUST implementar un sistema de puntos de control en los capítulos para que el jugador pueda reiniciar desde puntos anteriores tras perder.
+- **FR-010**: El sistema MUST presentar una progresión del ataque mágico de Milly a lo largo de los tres capítulos, con mejoras observables en efecto, alcance o interacción.
+- **FR-011**: El sistema MUST mostrar claramente que Milly descubre estar en otro período de tiempo durante la progresión de la historia.
+- **FR-012**: El juego MUST incluir un jefe final en el Capítulo 3 que sirva a Rey Monster, mientras que Rey Monster no se combate directamente en la Parte 2.
+- **FR-013**: El juego MUST mantener el estilo visual pixel art y la arquitectura actual, reutilizando sistemas existentes cuando sea posible.
+- **FR-014**: El juego MUST evitar introducir tecnologías modernas dentro de la ambientación medieval.
+- **FR-015**: El juego MUST mantener el tono y la identidad de Musiic Brothers, incluyendo continuidad narrativa con la primera entrega.
 
 ### Key Entities
 

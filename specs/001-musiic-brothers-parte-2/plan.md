@@ -6,15 +6,17 @@
 
 ## Summary
 
-Implementar la segunda parte del juego centrada en Milly con:
-- movimiento y salto jugable
-- carga y disparo de un proyectil mágico
-- NPCs interactivos y diálogos en castellano medieval
-- tres capítulos conectados por una narrativa de viaje temporal
-- coleccionables de fragmentos temporales
-- continuidad de estilo pixel art y arquitectura web estática existente
+Entregar una segunda parte jugable y narrativa de Musiic Brothers centrada en Milly, con:
+- tres capítulos con identidad propia: Aldea Perdida, Bosque de los Ecos y Torre del Tiempo
+- controles claros, salto y ataque mágico cargado
+- progresión del ataque mágico de Milly entre capítulos
+- NPCs con diálogos en castellano de fantasía medieval comprensible
+- un jefe final del Capítulo 3 que sirve a Rey Monster
+- sistema de puntos de control por capítulo
+- descubrimiento narrativo de que Milly está en otro período temporal
+- coleccionables de fragmentos temporales y transición fluida entre escenas
 
-El enfoque técnico se basa en modularizar la lógica del juego en archivos JS/CSS/HTML independientes, reutilizar la arquitectura actual y validar siempre en navegador sin depender de librerías externas.
+El enfoque técnico mantiene HTML/CSS/JS puro, reutiliza la arquitectura estática actual y añade lógica modular para cada subsistema del juego.
 
 ## Technical Context
 
@@ -22,9 +24,9 @@ El enfoque técnico se basa en modularizar la lógica del juego en archivos JS/C
 
 **Primary Dependencies**: Ninguna dependencia externa; solo recursos locales en `assets/`
 
-**Storage**: N/A (datos de juego en memoria de sesión)
+**Storage**: N/A (datos de juego en memoria de sesión / estado de capítulo temporal)
 
-**Testing**: Pruebas manuales en navegador moderno, verificaciones de flujo de juego
+**Testing**: Pruebas manuales en navegador moderno, con revisiones de flujo de capítulo y jugabilidad
 
 **Target Platform**: Navegadores web modernos, desktop y mobile responsive
 
@@ -35,26 +37,26 @@ El enfoque técnico se basa en modularizar la lógica del juego en archivos JS/C
 **Constraints**:
 - No usar frameworks ni plugins externos
 - Solo tecnologías web estáticas y recursos locales
-- Mantener estilo y arquitectura existentes
-- No introducir elementos tecnológicos fuera de la ambientación medieval
+- Mantener estilo pixel art y arquitectura actual
+- No introducir elementos tecnológicos modernos dentro de la ambientación medieval
 
-**Scale/Scope**: Implementación de un juego de plataforma narrativa con 3 capítulos, 1 protagonista y contenido interactivo local
+**Scale/Scope**: Juego de plataforma narrativa con 3 capítulos jugables, NPCs, un jefe final y coleccionables locales
 
 ## Constitution Check
 
 ### Requisitos clave de la constitución
-- Experiencia de juego primero: prioridad a controles claros, feedback visual y mecánicas jugables.
-- Compatibilidad web y rendimiento: ejecución local en navegador sin dependencias externas.
-- Diseño visual coherente y responsive: UI adaptativa para diálogos, HUD y menús.
-- Arquitectura mantenible y modular: separar lógica en módulos claros para player, escena, diálogo, enemigos y coleccionables.
-- Iteración con pulido constante: entregar primero la funcionalidad básica y luego añadir narrativa y efectos.
+- Experiencia de juego primero: foco en controles claros, feedback inmediato y mecánicas jugables.
+- Compatibilidad web y rendimiento: ejecución local sin dependencias externas.
+- Diseño visual coherente y responsive: UI y diálogos adaptativos en múltiples resoluciones.
+- Arquitectura mantenible y modular: separar controles, jugador, ataque, capítulos, NPCs, diálogos y UI.
+- Iteración con pulido constante: entregar funcionalidad básica antes de añadir efectos y narrativa adicional.
 
 ### Gates
 - [x] Uso exclusivo de HTML/CSS/JS puro y recursos locales.
 - [x] No se requieren servidores ni tecnologías externas para ejecutar el juego.
 - [x] El diseño respeta la estética pixel art y la identidad de Musiic Brothers.
-- [x] Migración modular de la lógica sin duplicar código innecesario.
-- [x] Validación manual de jugabilidad tras cada hito.
+- [x] Se mantiene una estructura modular sin duplicar lógica de juego.
+- [x] Se valida manualmente la jugabilidad y las transiciones de capítulo.
 
 ## Project Structure
 
@@ -69,81 +71,87 @@ specs/001-musiic-brothers-parte-2/
 
 ### Fuente propuesta
 ```text
-index.html                # o nueva página de entrada para la Parte 2
-css/                      # estilos compartidos y específicos de la Parte 2
+musiic-brothers-parte-2.html  # entrada del feature desde el menú o página principal
+css/
 ├── game.css
 ├── dialogue.css
 └── responsive.css
 js/
-├── input.js              # controles y mapeo de teclas/táctil
-├── player.js             # lógica de Milly y físicas básicas
-├── attack.js             # carga y proyectiles mágicos
-├── enemy.js              # enemigos básicos y colisiones
-├── npc.js                # NPCs e interacción de diálogo
-├── chapter.js            # administración de capítulos y objetivos
-├── collectibles.js       # fragmentos temporales
-└── ui.js                 # HUD, notificaciones y transiciones
+├── main.js                # inicialización y bucle principal del juego
+├── input.js               # controles de teclado/táctil
+├── player.js              # lógica de Milly y físicas básicas
+├── attack.js              # carga, disparo y progresión del ataque mágico
+├── enemy.js               # enemigos básicos y jefe final
+├── npc.js                 # NPCs y detección de interacción
+├── dialogue.js            # panel de diálogo y líneas de texto
+├── chapter.js             # definición de capítulos, objetivos y puntos de control
+├── collectibles.js        # fragmentos temporales y recolección
+└── ui.js                  # HUD, mensajes narrativos y transiciones
 assets/
-├── sprites/              # sprites pixel art de Milly, enemigos, objetos y NPCs
-├── audio/                # sonidos locales de ataque, diálogo y colección
-└── backgrounds/          # fondos de capítulo
+├── sprites/               # sprites pixel art de Milly, enemigos, NPCs y objetos
+├── audio/                 # sonidos locales de ataque, diálogo y colección
+└── backgrounds/           # fondos específicos de capítulo
 ```
 
-**Structure Decision**: Mantener la arquitectura actual del juego en archivos estáticos, agregando una carpeta `js/` y `css/` si no existen todavía, con la lógica modular de la nueva Parte 2.
+**Structure Decision**: Mantener la arquitectura web estática actual y añadir módulos específicos para la mecánica de capítulos, checkpoints y progresión de ataque.
 
 ## Technical Implementation Plan
 
-### Fase 0: Preparación
-- Revisar la arquitectura actual de `index.html`, `menu/` y cualquier código JS existente.
-- Identificar recursos reutilizables en `assets/` (sprites, audio) y qué activos nuevos se necesitan.
-- Definir el flujo de capítulo temprano: Aldea Perdida -> Bosque de los Ecos -> Torre del Tiempo.
+### Fase 0: Preparación y análisis
+- Revisar la arquitectura actual del juego, menús y páginas HTML existentes.
+- Identificar activos reutilizables y qué nuevos recursos pixel art y audio se requieren.
+- Confirmar la página de entrada y los nombres de archivo para la Parte 2.
+- Definir las tres escenas principales y sus objetivos narrativos:
+  - Capítulo 1: Aldea Perdida
+  - Capítulo 2: Bosque de los Ecos
+  - Capítulo 3: Torre del Tiempo
 
-### Fase 1: Mecánica de Milly
-- Implementar movimiento horizontal fluido y salto simple.
-- Añadir estado `onGround` y físicas ligeras para caída y salto.
-- Integrar animaciones básicas de Milly con sprites existentes.
+### Fase 1: Base jugable y checkpoints
+- Implementar el movimiento de Milly y el salto con físicas ligeras.
+- Añadir colisiones simples y detección de suelo.
+- Definir el sistema de puntos de control dentro de cada capítulo.
+- Permitir reiniciar desde el último checkpoint tras perder.
+- Crear indicadores de checkpoint en la UI.
 
-### Fase 2: Golpe de Energía
-- Definir botón/tecla de carga y liberar para disparar.
-- Mostrar un indicador de carga en HUD.
-- Crear `Projectile` con origen cercano al pecho de Milly, velocidad fija y duración limitada.
-- Implementar colisión de proyectil con enemigos y objetos activables.
+### Fase 2: Golpe de Energía y progresión del ataque
+- Implementar carga de energía y disparo de proyectil básico.
+- Añadir un indicador de carga en la interfaz.
+- Modelar la progresión del ataque mágico:
+  - Capítulo 1: proyectil básico y efectos iniciales
+  - Capítulo 2: ataque mejorado con alcance o interacción adicional
+  - Capítulo 3: versión final más poderosa o con efectos especiales para el jefe
+- Manejar colisiones de proyectiles con enemigos y objetos activables.
 
-### Fase 3: Enemigos y elementos especiales
-- Implementar enemigos básicos con hitbox, vida y muerte.
-- Añadir al menos un objeto activable por proyectil (palanca o puerta desbloqueable).
-- Manejar caso en que el proyectil no impacta nada (desaparece tras distancia/tiempo).
+### Fase 3: NPCs y diálogos narrativos
+- Implementar NPCs con interacción por proximidad y botón de acción.
+- Crear un panel de diálogo legible y responsive.
+- Garantizar que los textos de los NPCs usan castellano de fantasía medieval comprensible.
+- Actualizar objetivos y pistas cuando concluye un diálogo.
+- Incluir momentos narrativos donde Milly descubre estar en otro período temporal.
 
-### Fase 4: NPC y diálogo
-- Crear entidades NPC con posición y texto de diálogo.
-- Activar diálogo solo cuando el jugador está cerca y presiona interacción.
-- Diseñar caja de diálogo legible y responsive con líneas en castellano medieval.
-- Al finalizar el diálogo, actualizar objetivo o pista de capítulo.
+### Fase 4: Capítulos y jefe final
+- Definir la estructura de cada capítulo:
+  - Capítulo 1: Aldea Perdida con primera pista temporal
+  - Capítulo 2: Bosque de los Ecos con atmósfera distorsionada y progreso mágico
+  - Capítulo 3: Torre del Tiempo con jefe final que sirve a Rey Monster
+- Implementar transiciones narrativas entre capítulos.
+- Asegurar que Rey Monster no aparece como combate directo, sino como fuerza detrás de escenas.
+- Añadir el jefe final del Capítulo 3 con mecánica de combate contra Milly y relación temática con Rey Monster.
+- Finalizar el Capítulo 3 con activación del portal y la revelación de que Millyo sigue vivo.
 
-### Fase 5: Capítulos y narrativa
-- Modelar capítulos como escenas con:
-  - nombre
-  - objetivos claros
-  - NPCs
-  - enemigos y activadores
-  - coleccionables
-- Implementar transiciones entre capítulos con mensaje narrativo.
-- Validar las condiciones clave:
-  - final del Capítulo 1 revela la Torre del Tiempo
-  - Capítulo 2 ofrece acceso al portal
-  - Capítulo 3 culmina con jefe/pasaje y revelación de Millyo
-
-### Fase 6: Coleccionables y feedback
+### Fase 5: Coleccionables y feedback
 - Añadir fragmentos temporales ocultos en cada capítulo.
-- Registrar colección en contador UI.
-- Mostrar realimentación inmediata tras recoger un fragmento.
+- Registrar la colección y mostrar el progreso en la UI.
+- Proporcionar feedback visual/al sonido al recoger cada fragmento.
+- Asegurar que la recolección incentiva la exploración sin romper el flujo.
 
-### Fase 7: Pulido y pruebas
-- Ajustar animaciones, sonidos y feedback visual.
-- Asegurar que no se rompen menús ni navegación existente.
-- Probar en navegador moderno y varias resoluciones.
-- Documentar la ejecución local mínima si se añaden archivos nuevos.
+### Fase 6: Pulido y validación
+- Ajustar animaciones, sonidos y efectos del ataque mágico.
+- Verificar que los diálogos y textos son legibles y coherentes.
+- Probar la funcionalidad de checkpoints y reinicio de capítulos.
+- Revisar el balance del jefe final y la progresión de combate.
+- Validar la experiencia en navegadores modernos y en diversas resoluciones.
 
 ## Complexity Tracking
 
-No se anticipan violaciones de la constitución ni la introducción de tecnologías extrañas. El plan mantiene la implementación en una sola pila de HTML/CSS/JS y respeta la arquitectura de juego actual.
+No se requiere un cambio de arquitectura mayor ni dependencias nuevas. El plan respeta la constitución manteniendo el juego como una aplicación web estática, con módulos claros para la mecánica de capítulo, narración y control de estado.
