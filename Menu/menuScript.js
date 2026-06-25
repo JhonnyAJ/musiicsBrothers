@@ -1,19 +1,4 @@
-window.onload = function() {
-    const initialOverlay = document.getElementById('initial-overlay');
-    initialOverlay.addEventListener('click', function() {
-        initialOverlay.style.display = 'none';
-        playBackgroundMusic();
-    });
-};
-
-function playBackgroundMusic() {
-    const backgroundMusic = document.getElementById('background-music');
-    backgroundMusic.play().catch(error => {
-        console.error('Error playing background music:', error);
-    });
-}
-
-const storyTexts = [
+﻿const storyTexts = [
     "En un mundo no muy diferente al nuestro...",
     "Los hermanos Millyo y Milly vivían su vida tranquilamente...",
     "Hasta que todo cambió.",
@@ -23,13 +8,232 @@ const storyTexts = [
     "Capítulo 1: Un mundo distorsionado"
 ];
 
+const menuState = {
+    activeIndex: 0,
+    menuVisible: false,
+    storyActive: false,
+    creditsOpen: false
+};
+
+window.addEventListener('DOMContentLoaded', initMenu);
+
+function initMenu() {
+    const initialOverlay = document.getElementById('initial-overlay');
+    initialOverlay.addEventListener('click', onInitialOverlayClick);
+    initialOverlay.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onInitialOverlayClick();
+        }
+    });
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    const menuButtons = getMenuButtons();
+    menuButtons.forEach((button, index) => {
+        button.dataset.index = index;
+        button.addEventListener('click', onMenuButtonClick);
+        button.addEventListener('focus', () => {
+            menuState.activeIndex = index;
+        });
+    });
+
+    const backMenuButton = document.getElementById('back-menu');
+    backMenuButton.addEventListener('click', () => executeMenuAction('back'));
+    backMenuButton.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            executeMenuAction('back');
+        }
+    });
+
+    focusMenuButton(menuState.activeIndex);
+    setAudioVolume(0.1);
+}
+
+function onInitialOverlayClick() {
+    hideInitialOverlay();
+    playBackgroundMusic();
+    showMenu();
+}
+
+function hideInitialOverlay() {
+    const initialOverlay = document.getElementById('initial-overlay');
+    initialOverlay.style.display = 'none';
+}
+
+function showMenu() {
+    const menuMain = document.getElementById('menu-main');
+    menuMain.style.opacity = '1';
+    menuMain.style.pointerEvents = 'auto';
+    menuState.menuVisible = true;
+    focusMenuButton(menuState.activeIndex);
+}
+
+function hideMenu() {
+    const menuMain = document.getElementById('menu-main');
+    menuMain.style.opacity = '0';
+    menuMain.style.pointerEvents = 'none';
+    menuState.menuVisible = false;
+}
+
+function getMenuButtons() {
+    return Array.from(document.querySelectorAll('.menu-options button'));
+}
+
+function onMenuButtonClick(event) {
+    const action = event.currentTarget.dataset.action;
+    executeMenuAction(action);
+}
+
+function executeMenuAction(action) {
+    if (menuState.storyActive) {
+        return;
+    }
+
+    const handler = menuActions[action] || placeholderAction;
+    handler(action);
+}
+
+const menuActions = {
+    play: startGame,
+    continue: placeholderAction,
+    'chapter-select': placeholderAction,
+    options: placeholderAction,
+    exit: exitGame,
+    credits: openCredits,
+    back: closeCredits
+};
+
+function startGame() {
+    if (menuState.storyActive) {
+        return;
+    }
+
+    menuState.storyActive = true;
+    hideMenu();
+    showStory();
+}
+
+function placeholderAction(action) {
+    const messageMap = {
+        continue: 'Continuar estará disponible pronto.',
+        'chapter-select': 'Selección de capítulos estará disponible pronto.',
+        options: 'Opciones estará disponible pronto.',
+        exit: 'Salir estará disponible pronto.'
+    };
+
+    const message = messageMap[action] || 'Función próximamente disponible.';
+    window.alert(message);
+}
+
+function exitGame() {
+    window.alert('La opción Salir estará disponible en una versión futura.');
+}
+
+function openCredits() {
+    hideMenu();
+    const creditsOverlay = document.getElementById('credits-overlay');
+    creditsOverlay.classList.add('active');
+    menuState.creditsOpen = true;
+    document.getElementById('back-menu').focus();
+}
+
+function closeCredits() {
+    const creditsOverlay = document.getElementById('credits-overlay');
+    creditsOverlay.classList.remove('active');
+    menuState.creditsOpen = false;
+    showMenu();
+}
+
+function handleKeyDown(event) {
+    const keyboardMenuKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' '];
+
+    if (menuState.storyActive) {
+        return;
+    }
+
+    if (menuState.creditsOpen) {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeCredits();
+        }
+        return;
+    }
+
+    if (!menuState.menuVisible) {
+        return;
+    }
+
+    if (!keyboardMenuKeys.includes(event.key)) {
+        return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        const buttons = getMenuButtons();
+        const button = buttons[menuState.activeIndex];
+        if (button) {
+            button.click();
+        }
+        return;
+    }
+
+    event.preventDefault();
+    const buttons = getMenuButtons();
+    const delta = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+    moveFocus(delta, buttons);
+}
+
+function moveFocus(delta, buttons) {
+    if (!buttons.length) {
+        return;
+    }
+
+    let nextIndex = menuState.activeIndex + delta;
+    if (nextIndex < 0) {
+        nextIndex = buttons.length - 1;
+    } else if (nextIndex >= buttons.length) {
+        nextIndex = 0;
+    }
+
+    focusMenuButton(nextIndex, buttons);
+}
+
+function focusMenuButton(index, buttons = null) {
+    const menuButtons = buttons || getMenuButtons();
+    const button = menuButtons[index];
+    if (!button) {
+        return;
+    }
+    menuState.activeIndex = index;
+    button.focus();
+}
+
+function setAudioVolume(volume) {
+    const audio = document.getElementById('background-music');
+    if (audio) {
+        audio.volume = volume;
+    }
+}
+
+function playBackgroundMusic() {
+    const backgroundMusic = document.getElementById('background-music');
+    if (!backgroundMusic) {
+        return;
+    }
+    backgroundMusic.play().catch(error => {
+        console.error('Error playing background music:', error);
+    });
+}
+
 function showStory() {
     const storyOverlay = document.getElementById('story-overlay');
     const storyTextElement = document.getElementById('story-text');
     let currentTextIndex = 0;
 
-    storyOverlay.style.opacity = '1';
-    storyOverlay.style.pointerEvents = 'auto';
+    storyTextElement.innerHTML = '';
+    storyOverlay.classList.add('active');
 
     function typeText(text, index) {
         if (index < text.length) {
@@ -42,58 +246,26 @@ function showStory() {
 
     function nextScreen() {
         storyOverlay.removeEventListener('click', nextScreen);
-        currentTextIndex++;
+        currentTextIndex += 1;
         if (currentTextIndex < storyTexts.length) {
             storyTextElement.innerHTML = '';
             typeText(storyTexts[currentTextIndex], 0);
         } else {
-            storyOverlay.style.opacity = '0';
-            storyOverlay.style.pointerEvents = 'none';
+            storyOverlay.classList.remove('active');
             const backgroundMusic = document.getElementById('background-music');
-            localStorage.setItem('audioCurrentTime', backgroundMusic.currentTime);
+            if (backgroundMusic) {
+                localStorage.setItem('audioCurrentTime', backgroundMusic.currentTime);
+            }
 
             setTimeout(() => {
                 window.location.href = '../musiicBrothers.html';
-            }, 1000); // Espera 1 segundo antes de redirigir
+            }, 1000);
         }
     }
 
     typeText(storyTexts[currentTextIndex], 0);
 }
 
-// Función para iniciar el juego
-document.getElementById('play-button').addEventListener('click', function() {
-    const menuContainer = document.querySelector('.menu-container');
-    
-    // Ocultar el menú
-    menuContainer.style.display = 'none';
-    
-    // Mostrar la historia
-    showStory();
-});
-
-// Música de fondo
-const backgroundMusic = document.getElementById('background-music');
-backgroundMusic.volume = 0.1; // Ajusta el volumen
-
-// Efecto de partículas
-// for (let i = 0; i < 50; i++) {
-//     const particle = document.createElement('div');
-//     //particle.classList.add('particle');
-//     particle.style.left = `${Math.random() * 100}vw`;
-//     particle.style.top = `${Math.random() * 100}vh`;
-//     particle.style.animationDuration = `${Math.random() * 5 + 3}s`;
-//     particle.style.position = 'absolute';
-//     particle.style.width = '10px';
-//     particle.style.height = '10px';
-//     particle.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
-//     particle.style.borderRadius = '50%';
-//     particle.style.animation = 'floatParticle 5s infinite ease-in-out';
-//     document.body.appendChild(particle);
-// }
-
-
-// Partículas con canvas
 const canvas = document.getElementById('particles-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -102,12 +274,12 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
 
-// Configuración de partículas
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 const PARTICLE_COUNT = 50;
-const COLORS = ['#ff00ff', '#00e0ff', '#fff', '#ffd700']; // Puedes poner los colores que quieras
+const COLORS = ['#ff00ff', '#00e0ff', '#fff', '#ffd700'];
 
 function createParticle() {
     return {
@@ -127,33 +299,31 @@ function initParticles() {
         particles.push(createParticle());
     }
 }
-initParticles();
 
 function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let p of particles) {
-        ctx.globalAlpha = p.alpha;
+    for (const particle of particles) {
+        ctx.globalAlpha = particle.alpha;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
+        ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
         ctx.fill();
-        ctx.globalAlpha = 1;
     }
+    ctx.globalAlpha = 1;
 }
 
 function updateParticles() {
-    for (let p of particles) {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        if (p.y - p.r > canvas.height) {
-            // Reinicia la partícula arriba
-            p.x = Math.random() * canvas.width;
-            p.y = -p.r;
-            p.r = Math.random() * 4 + 3;
-            p.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-            p.speedX = (Math.random() - 0.5) * 0.5;
-            p.speedY = Math.random() * 0.7 + 0.2;
-            p.alpha = Math.random() * 0.5 + 0.5;
+    for (const particle of particles) {
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        if (particle.y - particle.r > canvas.height) {
+            particle.x = Math.random() * canvas.width;
+            particle.y = -particle.r;
+            particle.r = Math.random() * 4 + 3;
+            particle.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            particle.speedX = (Math.random() - 0.5) * 0.5;
+            particle.speedY = Math.random() * 0.7 + 0.2;
+            particle.alpha = Math.random() * 0.5 + 0.5;
         }
     }
 }
@@ -163,29 +333,6 @@ function animateParticles() {
     drawParticles();
     requestAnimationFrame(animateParticles);
 }
+
+initParticles();
 animateParticles();
-
-const menuMain = document.getElementById('menu-main');
-const menuCredits = document.getElementById('menu-credits');
-const creditsButton = document.getElementById('credits-button');
-const backMenuButton = document.getElementById('back-menu');
-
-// Mostrar créditos
-creditsButton.onclick = () => {
-  menuMain.style.opacity = '0';
-  setTimeout(() => {
-    menuMain.style.display = 'none';
-    menuCredits.style.display = 'block';
-    setTimeout(() => menuCredits.style.opacity = '1', 10);
-  }, 700);
-};
-
-// Volver al menú
-backMenuButton.onclick = () => {
-  menuCredits.style.opacity = '0';
-  setTimeout(() => {
-    menuCredits.style.display = 'none';
-    menuMain.style.display = 'block';
-    setTimeout(() => menuMain.style.opacity = '1', 10);
-  }, 700);
-};

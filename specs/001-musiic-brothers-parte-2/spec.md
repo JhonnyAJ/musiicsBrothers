@@ -8,6 +8,13 @@
 
 **Input**: User description: "Segunda parte de Musiic Brothers centrada en Milly, con ambientación medieval, combate mágico, NPC, diálogos y tres capítulos conectados por una narrativa de viajes temporales."
 
+## Clarifications
+
+### Session 2026-06-24
+
+- Q: ¿Dónde y cómo se almacenan los sprites de Milly para animaciones? → A: Los sprites de Milly están en `assets/milly` y usan el nombre de archivo con la convención `Milly-<Accion><orden>` para cada fotograma de animación.
+- Q: ¿Qué fondo y diseño de plataformas deben usarse en los niveles? → A: El fondo debe ser `assets/backgrounds/FondoGame`, con plataformas dibujadas encima y al menos 15 plataformas por nivel para llegar al portal.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Dominar a Milly y su ataque mágico (Priority: P1)
@@ -120,6 +127,9 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **FR-013**: El juego MUST mantener el estilo visual pixel art y la arquitectura actual, reutilizando sistemas existentes cuando sea posible.
 - **FR-014**: El juego MUST evitar introducir tecnologías modernas dentro de la ambientación medieval.
 - **FR-015**: El juego MUST mantener el tono y la identidad de Musiic Brothers, incluyendo continuidad narrativa con la primera entrega.
+- **FR-016**: El sistema MUST cargar y reproducir animaciones de Milly usando frames individuales desde `assets/milly` con nombre `Milly-<Accion><orden>` para cada fase de movimiento, salto y ataque.
+- **FR-017**: El sistema MUST presentar el fondo de juego usando `assets/backgrounds/FondoGame` y dibujar plataformas encima del fondo.
+- **FR-018**: Cada uno de los tres niveles MUST contener como mínimo 15 plataformas que permitan a Milly progresar hasta el portal de pase de nivel.
 
 ### Key Entities
 
@@ -146,11 +156,15 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **SC-010**: El Capítulo 3 must incluir un jefe final subordinado a Rey Monster, sin que Rey Monster sea combatido directamente.
 - **SC-011**: El jugador must descubrir mediante la narrativa que Milly está en otro período temporal.
 - **SC-012**: Los diálogos de NPC must presentarse en castellano de fantasía medieval comprensible.
+- **SC-013**: La animación de Milly must usar los frames de `assets/milly` con la convención `Milly-<Accion><orden>` y mostrarse en movimiento, salto y ataque mágico.
+- **SC-014**: Cada uno de los tres niveles must incluir al menos 15 plataformas sobre el fondo `assets/backgrounds/FondoGame` antes de alcanzar el portal de fin de nivel.
 
 ## Dependencies
 
 - El juego no debe usar librerías externas ni frameworks de terceros.
 - Todos los recursos deben cargarse localmente desde `assets/`.
+- Los recursos de animación de Milly deben provenir de `assets/milly` y seguir la convención de nombres `Milly-<Accion><orden>` para cada fotograma.
+- El fondo de juego debe usarse desde `assets/backgrounds/FondoGame`, con las plataformas dibujadas encima.
 - La experiencia debe ser ejecutable en el navegador sin servidor.
 
 ## Assumptions
