@@ -9,6 +9,10 @@
 Entregar una segunda parte jugable y narrativa de Musiic Brothers centrada en Milly, con:
 - tres capítulos con identidad propia: Aldea Perdida, Bosque de los Ecos y Torre del Tiempo
 - controles claros, salto y ataque mágico cargado
+- un fondo de juego basado en `assets/backgrounds/FondoGame` con plataformas dibujadas encima, pero solo para la Parte 2 del juego
+- un escenario que cubra toda la pantalla desde abajo, con plataformas más separadas y distribuidas por todo el mapa
+- un diseño de plataformas con estética medieval uniforme, usando la imagen `assets/backgrounds/plataforma.png` para todas las plataformas, con al menos 15 plataformas por capítulo de la Parte 2 para que Milly avance hasta el portal de cambio de nivel
+- una distribución visual del mapa que haga sentir que el juego ocupa completamente la imagen y que la progresión de salto sea más abierta y horizontal
 - progresión del ataque mágico de Milly entre capítulos
 - NPCs con diálogos en castellano de fantasía medieval comprensible
 - un jefe final del Capítulo 3 que sirve a Rey Monster
@@ -109,6 +113,8 @@ assets/
 ### Fase 1: Base jugable y checkpoints
 - Implementar el movimiento de Milly y el salto con físicas ligeras.
 - Añadir colisiones simples y detección de suelo.
+- Definir la geometría de cada nivel de la Parte 2 usando `assets/backgrounds/FondoGame` como fondo base y dibujar al menos 15 plataformas por capítulo sobre él, ocupando toda la pantalla desde abajo.
+- Diseñar la ruta de salto para que Milly llegue al portal de pase de nivel en cada capítulo de la Parte 2, con plataformas más separadas, distribuidas por toda la pantalla y usando la misma imagen `assets/backgrounds/plataforma.png` para todas.
 - Definir el sistema de puntos de control dentro de cada capítulo.
 - Permitir reiniciar desde el último checkpoint tras perder.
 - Crear indicadores de checkpoint en la UI.
@@ -163,6 +169,8 @@ No se requiere un cambio de arquitectura mayor ni dependencias nuevas. El plan r
   - `js/main.js`: small refactor to extract entity assembly helper to reduce duplication.
   - `css/responsive.css`: minor touch-action and mobile size tweaks.
   - Automated playtests executed to validate dialogues, chapter progression, boss hits and collectible persistence.
+ - Layout update: the game canvas now occupies the full viewport and HUD is overlaid (CSS updated in `css/game.css`).
+ - Platforms: platform rendering now uses `assets/backgrounds/plataforma.png` for a uniform look across levels.
 
 Files changed during implementation:
 - `js/collectibles.js`, `js/chapter.js`, `js/main.js`, `js/ui.js`, `css/game.css`, `css/responsive.css`, `musiic-brothers-parte-2.html`, `specs/.../tasks.md`

@@ -10,6 +10,7 @@ window.GameDialogue = {
     this.state.currentLine = 0;
     this.state.active = false;
     this.state.onComplete = null;
+    this.state.sourceNpcId = null;
     console.log('GameDialogue: inicializado.');
   },
   setLines(lines) {

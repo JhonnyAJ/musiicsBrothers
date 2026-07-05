@@ -20,10 +20,26 @@ window.GameAttack = {
     };
   },
   update(input, playerState) {
+    // show floating text when starting to charge, and on release
     if (input.charge) {
+      if (!this.state.isCharging) {
+        // started charging
+        if (window.GameUI && typeof GameUI.showFloatingText === 'function' && playerState) {
+          GameUI.showFloatingText('Pose poderosa!!!', playerState.x + playerState.width / 2 - 24, playerState.y - 24, 1200);
+        }
+      }
       this.state.isCharging = true;
       this.state.chargeLevel = Math.min(100, this.state.chargeLevel + 1);
     } else if (this.state.isCharging) {
+      // released charge
+      if (window.GameUI && playerState) {
+        if (typeof GameUI.clearFloatingTexts === 'function') {
+          GameUI.clearFloatingTexts();
+        }
+        if (typeof GameUI.showFloatingText === 'function') {
+          GameUI.showFloatingText('fu-ya', playerState.x + playerState.width / 2 - 12, playerState.y - 24, 900);
+        }
+      }
       this.fireProjectile(playerState, this.state.chargeLevel);
       this.state.isCharging = false;
       this.state.chargeLevel = 0;
@@ -41,9 +57,13 @@ window.GameAttack = {
       this.state.wasAttacking = false;
     }
 
+    const levelMaxX = window.GameChapter && typeof GameChapter.getCurrentChapter === 'function'
+      ? Math.max(900, ...(GameChapter.getCurrentChapter().platforms || []).map((platform) => platform.x + platform.width))
+      : 900;
+
     this.state.projectiles = this.state.projectiles.filter((projectile) => {
       projectile.x += projectile.vx;
-      return projectile.x < 900;
+      return projectile.x < levelMaxX + 220;
     });
   },
   fireProjectile(playerState, power) {

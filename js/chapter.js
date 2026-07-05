@@ -1,3 +1,36 @@
+function createLevelPlatforms(baseY, widthPattern, rows = 5, columns = 4) {
+  const platforms = [];
+
+  const horizontalSpacing = 420; // Más separación horizontal
+  const verticalSpacing = 88;    // Mantiene salto alcanzable con mayor potencia de salto
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      const index = row * columns + col;
+
+      const x =
+        32 +
+        col * horizontalSpacing +
+        (row % 2 === 1 ? 140 : 0) +
+        Math.random() * 40;
+
+      const y =
+        baseY -
+        row * verticalSpacing +
+        (Math.random() * 20 - 10);
+
+      platforms.push({
+        x,
+        y,
+        width: widthPattern[index % widthPattern.length],
+        height: 16
+      });
+    }
+  }
+
+  return platforms;
+}
+
 window.GameChapter = {
   state: {
     chapters: [],
@@ -5,69 +38,104 @@ window.GameChapter = {
     checkpoint: 1
   },
   init() {
+    const aldeaPlatforms = createLevelPlatforms(440, [122, 96, 78, 108, 136, 150, 164], 5, 5);
+    const bosquePlatforms = createLevelPlatforms(430, [132, 104, 86, 112, 148, 168, 182], 5, 5);
+    const torrePlatforms = createLevelPlatforms(424, [144, 112, 94, 118, 158, 174, 190], 5, 5);
+
+    const makePortal = (platforms) => {
+      if (!platforms.length) {
+        return { x: 740, y: 320, width: 40, height: 40, active: false };
+      }
+      const lastPlatform = platforms.reduce((best, platform) => {
+        return platform.x > best.x ? platform : best;
+      }, platforms[0]);
+      return {
+        x: lastPlatform.x + lastPlatform.width / 2 - 20,
+        y: lastPlatform.y - 44,
+        width: 40,
+        height: 40,
+        active: false
+      };
+    };
+
+    const makeActivatable = (platforms, index) => {
+      const platform = platforms[Math.min(index, platforms.length - 1)];
+      return {
+        x: platform.x + 18,
+        y: platform.y - 34,
+        width: 32,
+        height: 32,
+        activated: false
+      };
+    };
+
+    const makeNpc = (platforms, index, npcTemplate) => {
+      const platform = platforms[Math.min(index, platforms.length - 1)];
+      return [{
+        ...npcTemplate,
+        x: platform.x + 10,
+        y: platform.y - npcTemplate.height,
+      }];
+    };
+
     this.state.chapters = [
       {
         name: 'Aldea Perdida',
         checkpointPositions: [1, 2],
-        activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        platforms: aldeaPlatforms,
+        activatable: makeActivatable(aldeaPlatforms, 8),
         fragments: [
-          { id: 'a_frag_1', x: 300, y: 280, width: 16, height: 16 },
-          { id: 'a_frag_2', x: 420, y: 280, width: 16, height: 16 }
+          { id: 'a_frag_1', x: aldeaPlatforms[3].x + 12, y: aldeaPlatforms[3].y - 20, width: 16, height: 16 },
+          { id: 'a_frag_2', x: aldeaPlatforms[7].x + 10, y: aldeaPlatforms[7].y - 18, width: 16, height: 16 }
         ],
-        portal: { x: 740, y: 320, width: 40, height: 40, active: false },
-        npcs: [
-          {
-            id: 'aldeana',
-            name: 'Aldeana del valle',
-            x: 520,
-            y: 304,
-            width: 32,
-            height: 48,
-            talked: false,
-            dialogue: [
-              'Aldeana: Oh viajera, he sentido tu magia en la distancia.',
-              'Aldeana: La Aldea Perdida guarda un secreto antiguo entre sus runas.',
-              'Aldeana: Busca en el bosque un eco que te guíe hacia la Torre del Tiempo.'
-            ],
-            clue: 'El bosque te espera con un eco que aviva tu viaje.'
-          }
-        ]
+        portal: makePortal(aldeaPlatforms),
+        npcs: makeNpc(aldeaPlatforms, 1, {
+          id: 'aldeana',
+          name: 'Aldeana del valle',
+          width: 32,
+          height: 48,
+          talked: false,
+          dialogue: [
+            'Aldeana: Oh viajera, he sentido tu magia en la distancia.',
+            'Aldeana: La Aldea Perdida guarda un secreto antiguo entre sus runas.',
+            'Aldeana: Busca en el bosque un eco que te guíe hacia la Torre del Tiempo.'
+          ],
+          clue: 'El bosque te espera con un eco que aviva tu viaje.'
+        })
       },
       {
         name: 'Bosque de los Ecos',
         checkpointPositions: [1, 2],
-        activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        platforms: bosquePlatforms,
+        activatable: makeActivatable(bosquePlatforms, 9),
         fragments: [
-          { id: 'b_frag_1', x: 260, y: 260, width: 16, height: 16 },
-          { id: 'b_frag_2', x: 740, y: 260, width: 16, height: 16 }
+          { id: 'b_frag_1', x: bosquePlatforms[4].x + 12, y: bosquePlatforms[4].y - 18, width: 16, height: 16 },
+          { id: 'b_frag_2', x: bosquePlatforms[8].x + 10, y: bosquePlatforms[8].y - 18, width: 16, height: 16 }
         ],
-        portal: { x: 740, y: 320, width: 40, height: 40, active: false },
-        npcs: [
-          {
-            id: 'eco',
-            name: 'Espíritu del Eco',
-            x: 520,
-            y: 304,
-            width: 32,
-            height: 48,
-            talked: false,
-            dialogue: [
-              'Eco: Escucha la canción del bosque, viajera de tiempos antiguos.',
-              'Eco: Tu corazón debe brillar con paciencia y fuerza para seguir.',
-              'Eco: Solo quien comprenda el sonido del tiempo podrá llegar a la Torre.'
-            ],
-            clue: 'El sendero al final del bosque conduce a la Torre del Tiempo.'
-          }
-        ]
+        portal: makePortal(bosquePlatforms),
+        npcs: makeNpc(bosquePlatforms, 2, {
+          id: 'eco',
+          name: 'Espíritu del Eco',
+          width: 32,
+          height: 48,
+          talked: false,
+          dialogue: [
+            'Eco: Escucha la canción del bosque, viajera de tiempos antiguos.',
+            'Eco: Tu corazón debe brillar con paciencia y fuerza para seguir.',
+            'Eco: Solo quien comprenda el sonido del tiempo podrá llegar a la Torre.'
+          ],
+          clue: 'El sendero al final del bosque conduce a la Torre del Tiempo.'
+        })
       },
       {
         name: 'Torre del Tiempo',
         checkpointPositions: [1, 2],
-        activatable: { x: 700, y: 280, width: 32, height: 32, activated: false },
+        platforms: torrePlatforms,
+        activatable: makeActivatable(torrePlatforms, 10),
         fragments: [
-          { id: 't_frag_1', x: 680, y: 240, width: 16, height: 16 }
+          { id: 't_frag_1', x: torrePlatforms[12].x + 12, y: torrePlatforms[12].y - 18, width: 16, height: 16 }
         ],
-        portal: { x: 740, y: 320, width: 40, height: 40, active: false },
+        portal: makePortal(torrePlatforms),
         npcs: []
       }
     ];
@@ -81,6 +149,9 @@ window.GameChapter = {
   getNPCs() {
     return this.getCurrentChapter().npcs || [];
   },
+  getPlatforms() {
+    return this.getCurrentChapter().platforms || [];
+  },
   getNPCById(id) {
     return this.getNPCs().find((npc) => npc.id === id);
   },
@@ -90,6 +161,11 @@ window.GameChapter = {
       return false;
     }
 
+    // mark source NPC so UI/dialogue-aware systems can react
+    if (window.GameDialogue && GameDialogue.state) {
+      GameDialogue.state.sourceNpcId = id;
+    }
+
     GameDialogue.setLines(npc.dialogue);
     GameDialogue.state.onComplete = () => this.onDialogueComplete(npc);
     GameDialogue.start();
@@ -97,6 +173,10 @@ window.GameChapter = {
   },
   onDialogueComplete(npc) {
     npc.talked = true;
+    // clear source NPC when dialogue ends
+    if (window.GameDialogue && GameDialogue.state) {
+      GameDialogue.state.sourceNpcId = null;
+    }
     const clue = npc.clue || 'Has escuchado la historia del lugar.';
     GameUI.showStageMessage(clue);
     this.checkPortalActivation();

@@ -1,7 +1,7 @@
 window.GameNPC = {
   state: {
     npcs: [],
-    interactDistance: 64,
+    interactDistance: 120,
     interactPressed: false,
     canInteract: false
   },

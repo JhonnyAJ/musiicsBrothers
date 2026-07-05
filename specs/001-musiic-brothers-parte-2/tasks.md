@@ -46,6 +46,13 @@
 - [X] T022 [US1] Implement basic enemy damage and defeat behavior in `js/enemy.js`
 - [X] T023 [US1] Implement projectile-triggered object activation in `js/chapter.js`
 - [X] T024 [US1] Add Capítulo 1 layout and initial game wiring in `musiic-brothers-parte-2.html`
+- [x] T024a [US1] Definir la geometría de los tres niveles de la Parte 2 usando `assets/backgrounds/FondoGame` como fondo base y colocar al menos 15 plataformas por capítulo hasta el portal de pase de nivel.
+- [x] T024b [US1] Dibujar las plataformas sobre el fondo de cada capítulo de la Parte 2 y asegurar que Milly pueda saltar sobre ellas para completar la ruta de avance.
+- [x] T024c [US1] Implementar la lógica de colisión con plataformas y la activación del portal cuando el jugador alcanza el final del nivel de la Parte 2.
+- [x] T024d [US1] Ajustar la distribución del escenario para que ocupe toda la pantalla desde abajo y las plataformas queden más separadas y repartidas por todo el mapa.
+- [x] T024e [US1] Rediseñar visualmente las plataformas con una estética medieval de tierra y césped, con parte inferior marrón y parte superior verde.
+ - [x] T024f [US1] Usar `assets/backgrounds/plataforma.png` como imagen única para todas las plataformas y ajustar CSS para renderizado.
+ - [x] T024g [US1] Reacomodar enemigos, portal y NPCs para coincidir con la nueva distribución de plataformas.
 - [X] T025 [P] [US1] Add charge meter and basic HUD display in `js/ui.js`
 - [X] T026 [P] [US1] Style Milly, projectile, enemy and HUD elements in `css/game.css`
 
@@ -107,9 +114,8 @@
  - [X] T049 [X] Playtest Capítulo 1, Capítulo 2 and Capítulo 3 in browser and verify story progression
  - [X] T050 [X] Validate NPC dialogues, checkpoint behavior, attack progression and boss combat across all chapters
  - [X] T051 [X] Validate collectible fragment behavior and session progress display
- - [X] T052 [X] Update `specs/001-musiic-brothers-parte-2/plan.md` with implementation notes, actual file paths and any architectural changes
-
----
+- [x] T052 [P] Validar que cada capítulo de la Parte 2 use el fondo `assets/backgrounds/FondoGame`, contenga al menos 15 plataformas, ocupe toda la pantalla desde abajo y permita llegar al portal de pase de nivel.
+- [X] T053 [X] Update `specs/001-musiic-brothers-parte-2/plan.md` with implementation notes, actual file paths and any architectural changes
 
 ## Dependencies & Execution Order
 

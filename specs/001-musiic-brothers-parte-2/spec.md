@@ -13,7 +13,7 @@
 ### Session 2026-06-24
 
 - Q: ¿Dónde y cómo se almacenan los sprites de Milly para animaciones? → A: Los sprites de Milly están en `assets/milly` y usan el nombre de archivo con la convención `Milly-<Accion><orden>` para cada fotograma de animación.
-- Q: ¿Qué fondo y diseño de plataformas deben usarse en los niveles? → A: El fondo debe ser `assets/backgrounds/FondoGame`, con plataformas dibujadas encima y al menos 15 plataformas por nivel para llegar al portal.
+- Q: ¿Qué fondo y diseño de plataformas deben usarse en los niveles? → A: Solo en la Parte 2 del juego, el fondo debe ser `assets/backgrounds/FondoGame`, el escenario debe cubrir toda la pantalla desde abajo, las plataformas deben estar más separadas por el mapa y distribuidas por toda la pantalla, y todas las plataformas deben usar la imagen `assets/backgrounds/plataforma.png`, con al menos 15 plataformas por nivel para llegar al portal.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -128,8 +128,8 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **FR-014**: El juego MUST evitar introducir tecnologías modernas dentro de la ambientación medieval.
 - **FR-015**: El juego MUST mantener el tono y la identidad de Musiic Brothers, incluyendo continuidad narrativa con la primera entrega.
 - **FR-016**: El sistema MUST cargar y reproducir animaciones de Milly usando frames individuales desde `assets/milly` con nombre `Milly-<Accion><orden>` para cada fase de movimiento, salto y ataque.
-- **FR-017**: El sistema MUST presentar el fondo de juego usando `assets/backgrounds/FondoGame` y dibujar plataformas encima del fondo.
-- **FR-018**: Cada uno de los tres niveles MUST contener como mínimo 15 plataformas que permitan a Milly progresar hasta el portal de pase de nivel.
+- **FR-017**: El sistema MUST presentar, únicamente en la Parte 2 del juego, el fondo de juego usando `assets/backgrounds/FondoGame` y dibujar plataformas encima del fondo, ocupando toda la pantalla desde abajo y usando la imagen `assets/backgrounds/plataforma.png` para todas ellas.
+- **FR-018**: Cada uno de los tres niveles de la Parte 2 MUST contener como mínimo 15 plataformas separadas entre sí y distribuidas por toda la pantalla, que permitan a Milly progresar hasta el portal de pase de nivel.
 
 ### Key Entities
 
@@ -157,7 +157,7 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **SC-011**: El jugador must descubrir mediante la narrativa que Milly está en otro período temporal.
 - **SC-012**: Los diálogos de NPC must presentarse en castellano de fantasía medieval comprensible.
 - **SC-013**: La animación de Milly must usar los frames de `assets/milly` con la convención `Milly-<Accion><orden>` y mostrarse en movimiento, salto y ataque mágico.
-- **SC-014**: Cada uno de los tres niveles must incluir al menos 15 plataformas sobre el fondo `assets/backgrounds/FondoGame` antes de alcanzar el portal de fin de nivel.
+- **SC-014**: Cada uno de los tres niveles de la Parte 2 must incluir al menos 15 plataformas sobre el fondo `assets/backgrounds/FondoGame`, distribuidas por toda la pantalla y usando la imagen `assets/backgrounds/plataforma.png` antes de alcanzar el portal de fin de nivel.
 
 ## Dependencies
 

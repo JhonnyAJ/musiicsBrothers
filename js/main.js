@@ -8,6 +8,9 @@ window.Game = {
   init() {
     AssetsLoader.preload(() => {
       GameUI.init();
+      if (window.GameCamera && typeof window.GameCamera.init === 'function') {
+        GameCamera.init();
+      }
       GameInput.init();
       GamePlayer.init();
       GameChapter.init();
@@ -19,6 +22,9 @@ window.Game = {
 
       this.setChapter(this.state.chapter);
       this.setCheckpoint(this.state.checkpoint);
+      if (window.GamePlayer && GamePlayer.state && typeof GameUI.setLife === 'function') {
+        GameUI.setLife(GamePlayer.state.lives);
+      }
       this.updateCharge(0);
       GameUI.hideStageMessage();
       this.state.loaded = true;
@@ -64,9 +70,20 @@ window.Game = {
     const input = GameInput.state;
     GamePlayer.update(input);
     const playerState = GamePlayer.state;
+
+    if (window.GameEnemy && typeof GameEnemy.checkPlayerCollision === 'function') {
+      GameEnemy.checkPlayerCollision(playerState);
+    }
+
     GameAttack.update(input, playerState);
 
+    // Update camera to follow player
+    if (window.GameCamera && typeof GameCamera.update === 'function') {
+      GameCamera.update(playerState);
+    }
+
     GameEnemy.checkProjectileCollisions(GameAttack.state.projectiles);
+    GameEnemy.checkPlayerProjectileCollision(playerState);
     const activated = GameChapter.checkProjectileActivation(GameAttack.state.projectiles);
     if (activated) {
       console.log('Game: objeto activado con proyectil.');
@@ -78,7 +95,7 @@ window.Game = {
       GameCollectibles.update(playerState);
     }
 
-    GameEnemy.update();
+    GameEnemy.update(playerState);
     GameNPC.update(input, playerState);
     this.updateCharge(GameAttack.getCharge());
 
@@ -86,9 +103,11 @@ window.Game = {
       const entities = [];
       entities.push({ x: playerState.x, y: playerState.y, width: playerState.width, height: playerState.height, className: 'player' });
       entities.push(...GameAttack.state.projectiles.map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'projectile' })));
+      entities.push(...(GameChapter.getPlatforms() || []).map((platform) => ({ x: platform.x, y: platform.y, width: platform.width, height: platform.height, className: 'platform' })));
       entities.push(...GameEnemy.getEnemies().map((e) => ({ x: e.x, y: e.y, width: e.width, height: e.height, className: 'enemy' })));
       const boss = GameEnemy.getBoss();
       if (boss) entities.push({ x: boss.x, y: boss.y, width: boss.width, height: boss.height, className: 'boss' });
+      entities.push(...GameEnemy.getEnemyProjectiles().map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'enemy-projectile' })));
       entities.push(...GameChapter.getNPCs().map((npc) => ({ x: npc.x, y: npc.y, width: npc.width, height: npc.height, className: 'npc' })));
       const object = GameChapter.getActiveObject();
       if (object) entities.push({ x: object.x, y: object.y, width: object.width, height: object.height, className: 'activatable', active: object.activated });
