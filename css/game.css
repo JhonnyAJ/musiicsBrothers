@@ -58,6 +58,16 @@ body.game-page {
   width: 32px;
   height: 32px;
   border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.sprite-entity {
+  display: block;
+  object-fit: cover;
+  image-rendering: pixelated;
+  pointer-events: none;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .player {

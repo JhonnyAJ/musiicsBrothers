@@ -20,10 +20,8 @@ window.GameAttack = {
     };
   },
   update(input, playerState) {
-    // show floating text when starting to charge, and on release
     if (input.charge) {
       if (!this.state.isCharging) {
-        // started charging
         if (window.GameUI && typeof GameUI.showFloatingText === 'function' && playerState) {
           GameUI.showFloatingText('Pose poderosa!!!', playerState.x + playerState.width / 2 - 24, playerState.y - 24, 1200);
         }
@@ -31,7 +29,6 @@ window.GameAttack = {
       this.state.isCharging = true;
       this.state.chargeLevel = Math.min(100, this.state.chargeLevel + 1);
     } else if (this.state.isCharging) {
-      // released charge
       if (window.GameUI && playerState) {
         if (typeof GameUI.clearFloatingTexts === 'function') {
           GameUI.clearFloatingTexts();
@@ -67,6 +64,10 @@ window.GameAttack = {
     });
   },
   fireProjectile(playerState, power) {
+    if (!playerState) {
+      return;
+    }
+
     const modifiers = this.getAttackModifiers();
     const speed = 5 + Math.floor(power / 20) + modifiers.speedBonus;
     const projectileWidth = 16 + modifiers.sizeBonus;
@@ -82,6 +83,11 @@ window.GameAttack = {
       width: projectileWidth,
       height: projectileHeight
     });
+
+    if (window.GamePlayer && typeof GamePlayer.startAttackAnimation === 'function') {
+      GamePlayer.startAttackAnimation();
+    }
+
     console.log('GameAttack: proyectil lanzado con carga', power, 'modificado a', power + modifiers.powerBonus);
   },
   getCharge() {

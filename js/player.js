@@ -11,23 +11,36 @@ window.GamePlayer = {
     jumpStrength: 9.5,
     lives: 3,
     alive: true,
-    invulnerableUntil: 0
+    invulnerableUntil: 0,
+    animationState: 'idle',
+    lastInputAt: 0,
+    attackAnimationUntil: 0,
+    facing: 1
   },
   init() {
     console.log('GamePlayer: inicializado.');
+    this.state.lastInputAt = Date.now();
     this.setInvulnerable(2000);
   },
   update(input) {
+    const now = Date.now();
+
     if (input.left) {
       this.state.vx = -this.state.speed;
+      this.state.facing = -1;
     } else if (input.right) {
       this.state.vx = this.state.speed;
+      this.state.facing = 1;
     } else {
       this.state.vx = 0;
     }
 
     if (!this.state.alive) {
       return;
+    }
+
+    if (input.left || input.right || input.jump || input.charge || input.attack) {
+      this.state.lastInputAt = now;
     }
 
     if (input.jump && this.state.onGround) {
@@ -75,7 +88,59 @@ window.GamePlayer = {
 
     if (this.state.y > (window.innerHeight || 600) + 80) {
       this.loseLife();
+      return;
     }
+
+    this.updateAnimationState(now);
+  },
+  updateAnimationState(now) {
+    const chargeActive = Boolean((window.GameAttack && window.GameAttack.state && window.GameAttack.state.isCharging) || (window.GameInput && window.GameInput.state && window.GameInput.state.charge));
+    const attackActive = now < this.state.attackAnimationUntil;
+
+    if (attackActive) {
+      this.state.animationState = 'attack';
+    } else if (chargeActive) {
+      this.state.animationState = 'charge';
+    } else if (!this.state.onGround) {
+      this.state.animationState = 'jump';
+    } else if (Math.abs(this.state.vx) > 0.1) {
+      this.state.animationState = 'run';
+    } else if (now - this.state.lastInputAt > 3000) {
+      this.state.animationState = 'inactive';
+    } else {
+      this.state.animationState = 'idle';
+    }
+  },
+  getAnimationAssetName() {
+    switch (this.state.animationState) {
+      case 'run':
+        return ['milly-run-1', 'milly-run-2', 'milly-run-3'][Math.floor(Date.now() / 120) % 3];
+      case 'jump':
+        return this.state.vy < 0 ? 'milly-jump-1' : 'milly-jump-2';
+      case 'charge':
+        return 'milly-pose-poderosa';
+      case 'attack':
+        return 'milly-fuya';
+      case 'inactive':
+        return 'milly-inactiva';
+      default:
+        return 'milly-stop';
+    }
+  },
+  startAttackAnimation(durationMs = 220) {
+    this.state.attackAnimationUntil = Date.now() + durationMs;
+    this.state.animationState = 'attack';
+  },
+  getRenderState() {
+    return {
+      x: this.state.x,
+      y: this.state.y,
+      width: this.state.width,
+      height: this.state.height,
+      className: 'player',
+      sprite: this.getAnimationAssetName(),
+      flipX: this.state.facing < 0
+    };
   },
   isInvulnerable() {
     return Date.now() < this.state.invulnerableUntil;
@@ -117,6 +182,9 @@ window.GamePlayer = {
     this.state.vx = 0;
     this.state.vy = 0;
     this.state.onGround = false;
+    this.state.animationState = 'idle';
+    this.state.attackAnimationUntil = 0;
+    this.state.lastInputAt = Date.now();
     this.setInvulnerable(2000);
   }
 };

@@ -15,6 +15,10 @@
 - Q: ¿Dónde y cómo se almacenan los sprites de Milly para animaciones? → A: Los sprites de Milly están en `assets/milly` y usan el nombre de archivo con la convención `Milly-<Accion><orden>` para cada fotograma de animación.
 - Q: ¿Qué fondo y diseño de plataformas deben usarse en los niveles? → A: Solo en la Parte 2 del juego, el fondo debe ser `assets/backgrounds/FondoGame`, el escenario debe cubrir toda la pantalla desde abajo, las plataformas deben estar más separadas por el mapa y distribuidas por toda la pantalla, y todas las plataformas deben usar la imagen `assets/backgrounds/plataforma.png`, con al menos 15 plataformas por nivel para llegar al portal.
 
+### Session 2026-07-12
+
+- Q: ¿Cómo debe adaptarse la apariencia de Milly a los sprites? → A: Los sprites de Milly se escalarán a 32x48 px para conservar la hitbox actual. Correrá usando `Milly-Run1`, `Milly-Run2` y `Milly-Run3`, alternándolos al moverse; cuando esté quieta usará `Milly-Stop`; al saltar usará `Milly-Jump1` y `Milly-Jump2`; si no recibe instrucciones durante 4 segundos usará `Milly-Inactiva`; al cargar el poder usará `Milly-posePoderosa`; al lanzar el poder usará `Milly-fuya`.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Dominar a Milly y su ataque mágico (Priority: P1)

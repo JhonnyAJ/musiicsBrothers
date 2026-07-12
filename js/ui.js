@@ -39,19 +39,34 @@ window.GameUI = {
     }
     this.clearGameLayer();
 
-    // Apply camera transform (translation + scale) to game layer if available
     if (window.GameCamera && this.elements.gameLayer) {
       const cam = window.GameCamera.state;
-      // ensure transforms use top-left as origin so scale + translate math stays in world coords
       this.elements.gameLayer.style.transformOrigin = '0 0';
       this.elements.gameLayer.style.transform = `translate(${-Math.round(cam.x)}px, ${-Math.round(cam.y)}px) scale(${cam.zoom})`;
       this.elements.gameLayer.style.willChange = 'transform';
     }
 
     entities.forEach((entity) => {
-      const element = document.createElement('div');
-      element.className = `entity ${entity.className}`;
-      // Entities are placed in world coordinates; camera translation moves the viewport
+      let element;
+      if (entity.sprite) {
+        const spriteAsset = window.AssetsLoader && typeof window.AssetsLoader.getAsset === 'function'
+          ? window.AssetsLoader.getAsset(entity.sprite)
+          : null;
+        element = document.createElement('img');
+        element.className = `entity ${entity.className} sprite-entity`;
+        element.alt = entity.sprite || 'sprite';
+        element.draggable = false;
+        if (spriteAsset) {
+          element.src = spriteAsset.src;
+        }
+        element.style.objectFit = 'cover';
+        element.style.imageRendering = 'pixelated';
+        element.style.transform = entity.flipX ? 'scaleX(-1)' : 'none';
+      } else {
+        element = document.createElement('div');
+        element.className = `entity ${entity.className}`;
+      }
+
       element.style.left = `${entity.x}px`;
       element.style.top = `${entity.y}px`;
       element.style.width = `${entity.width}px`;
@@ -62,7 +77,6 @@ window.GameUI = {
       this.elements.gameLayer.appendChild(element);
     });
 
-    // Render floating texts (world coordinates)
     const now = Date.now();
     this._floatingTexts = (this._floatingTexts || []).filter(ft => ft.expiresAt > now);
     (this._floatingTexts || []).forEach((ft) => {

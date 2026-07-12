@@ -55,7 +55,10 @@
  - [x] T024g [US1] Reacomodar enemigos, portal y NPCs para coincidir con la nueva distribución de plataformas.
 - [X] T025 [P] [US1] Add charge meter and basic HUD display in `js/ui.js`
 - [X] T026 [P] [US1] Style Milly, projectile, enemy and HUD elements in `css/game.css`
-
+- [X] T026a [US1] Add Milly sprite asset loading for `assets/sprites/milly/Milly-Run1.png`, `Milly-Run2.png`, `Milly-Run3.png`, `Milly-Stop.png`, `Milly-Jump1.png`, `Milly-Jump2.png`, `Milly-Inactiva.png`, `Milly-posePoderosa.png` and `Milly-fuya.png` in `js/assets-loader.js` or the player bootstrap path
+- [X] T026b [US1] Implement Milly animation state logic in `js/player.js` for run, idle, jump, inactive, charge and attack states using the sprite set above
+- [X] T026c [US1] Render Milly with the active sprite frame in `js/ui.js` or the player render path while preserving the current 32x48 px hitbox and world positioning
+- [X] T026d [US1] Synchronize Milly sprite changes with movement, jump, inactivity timeout, charging and projectile launch so the animation feels responsive
 ---
 
 ## Phase 4: User Story 2 - Explorar el mundo medieval con NPC y diálogos (Priority: P1)
