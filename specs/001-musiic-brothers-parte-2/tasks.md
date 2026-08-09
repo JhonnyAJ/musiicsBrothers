@@ -59,6 +59,10 @@
 - [X] T026b [US1] Implement Milly animation state logic in `js/player.js` for run, idle, jump, inactive, charge and attack states using the sprite set above
 - [X] T026c [US1] Render Milly with the active sprite frame in `js/ui.js` or the player render path while preserving the current 32x48 px hitbox and world positioning
 - [X] T026d [US1] Synchronize Milly sprite changes with movement, jump, inactivity timeout, charging and projectile launch so the animation feels responsive
+- [X] T026e [P] [US1] Add enemy sprite asset loading for `assets/sprites/enemy/shooterEnemy1.png`, `assets/sprites/enemy/ShootingEnemy.png` and `assets/sprites/enemy/diedEnemy.png` in `js/assets-loader.js` or the game bootstrap path
+- [X] T026f [US1] Implement enemy render state logic in `js/enemy.js` so shooter enemies use `shooterEnemy1.png` during attack and `ShootingEnemy.png` for firing state
+- [X] T026g [US1] Implement enemy death animation state in `js/enemy.js` and render `diedEnemy.png` for 2 seconds before removing the enemy from the game
+- [X] T026h [P] [US1] Style enemy sprite rendering in `css/game.css` and ensure enemy sprite frames align with collision hitboxes and level layout
 ---
 
 ## Phase 4: User Story 2 - Explorar el mundo medieval con NPC y diálogos (Priority: P1)

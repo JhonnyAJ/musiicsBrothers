@@ -71,6 +71,9 @@ window.GameUI = {
       element.style.top = `${entity.y}px`;
       element.style.width = `${entity.width}px`;
       element.style.height = `${entity.height}px`;
+      if (typeof entity.opacity === 'number') {
+        element.style.opacity = entity.opacity;
+      }
       if (entity.active) {
         element.classList.add('object-activated');
       }

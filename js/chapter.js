@@ -1,7 +1,7 @@
-function createLevelPlatforms(baseY, widthPattern, rows = 5, columns = 4) {
+function createLevelPlatforms(baseY, widthPattern, rows = 5, columns = 4, randomize = true) {
   const platforms = [];
 
-  const horizontalSpacing = 420; // Más separación horizontal
+  const horizontalSpacing = 360; // Ajuste adicional para que las últimas plataformas queden más cerca
   const verticalSpacing = 88;    // Mantiene salto alcanzable con mayor potencia de salto
 
   for (let row = 0; row < rows; row++) {
@@ -12,12 +12,12 @@ function createLevelPlatforms(baseY, widthPattern, rows = 5, columns = 4) {
         32 +
         col * horizontalSpacing +
         (row % 2 === 1 ? 140 : 0) +
-        Math.random() * 40;
+        (randomize ? Math.random() * 40 : 0);
 
       const y =
         baseY -
         row * verticalSpacing +
-        (Math.random() * 20 - 10);
+        (randomize ? (Math.random() * 20 - 10) : 0);
 
       platforms.push({
         x,
@@ -38,7 +38,7 @@ window.GameChapter = {
     checkpoint: 1
   },
   init() {
-    const aldeaPlatforms = createLevelPlatforms(440, [122, 96, 78, 108, 136, 150, 164], 5, 5);
+    const aldeaPlatforms = createLevelPlatforms(440, [122, 96, 78, 108, 136, 150, 164], 5, 5, false);
     const bosquePlatforms = createLevelPlatforms(430, [132, 104, 86, 112, 148, 168, 182], 5, 5);
     const torrePlatforms = createLevelPlatforms(424, [144, 112, 94, 118, 158, 174, 190], 5, 5);
 

@@ -10,6 +10,7 @@ Entregar una segunda parte jugable y narrativa de Musiic Brothers centrada en Mi
 - tres capítulos con identidad propia: Aldea Perdida, Bosque de los Ecos y Torre del Tiempo
 - controles claros, salto y ataque mágico cargado
 - animaciones de Milly basadas en sprites para correr, saltar, estar quieta, inactividad y uso del poder
+- enemigos representados por sprites en `assets/sprites/enemy`, usando `shooterEnemy1.png` para el estado de ataque, `ShootingEnemy.png` para el disparo enemigo y `diedEnemy.png` para la muerte, con el sprite de muerte visible 2 segundos antes de desaparecer
 - un fondo de juego basado en `assets/backgrounds/FondoGame` con plataformas dibujadas encima, pero solo para la Parte 2 del juego
 - un escenario que cubra toda la pantalla desde abajo, con plataformas más separadas y distribuidas por todo el mapa
 - un diseño de plataformas con estética medieval uniforme, usando la imagen `assets/backgrounds/plataforma.png` para todas las plataformas, con al menos 15 plataformas por capítulo de la Parte 2 para que Milly avance hasta el portal de cambio de nivel
@@ -124,6 +125,7 @@ assets/
 - Implementar un sistema de animación de Milly usando frames individuales desde `assets/sprites/milly` con el esquema `Milly-<Accion><orden>`.
 - Añadir un estado de animación por acción: correr (frames `Milly-Run1`, `Milly-Run2`, `Milly-Run3`), quieto (`Milly-Stop`), salto (`Milly-Jump1`, `Milly-Jump2`), inactividad tras 4 segundos sin input (`Milly-Inactiva`), carga de poder (`Milly-posePoderosa`) y lanzamiento (`Milly-fuya`).
 - Escalar los sprites a 32x48 px para conservar la hitbox actual de Milly.
+- Reemplazar la representación de enemigos genéricos por sprites desde `assets/sprites/enemy`, usando `shooterEnemy1.png` en ataque, `ShootingEnemy.png` para los disparos enemigos y `diedEnemy.png` para la muerte, manteniendo el sprite de muerte visible 2 segundos antes de eliminar la entidad.
 - Sincronizar la animación con el movimiento, el salto, la carga energética y el disparo del ataque mágico.
 - Implementar carga de energía y disparo de proyectil básico.
 - Añadir un indicador de carga en la interfaz.

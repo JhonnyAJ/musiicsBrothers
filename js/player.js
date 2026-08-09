@@ -4,14 +4,15 @@ window.GamePlayer = {
     y: 300,
     vx: 0,
     vy: 0,
-    width: 32,
-    height: 48,
+    width: 40,
+    height: 56,
     onGround: false,
     speed: 2.8,
     jumpStrength: 9.5,
     lives: 3,
     alive: true,
     invulnerableUntil: 0,
+    hurtUntil: 0,
     animationState: 'idle',
     lastInputAt: 0,
     attackAnimationUntil: 0,
@@ -97,7 +98,9 @@ window.GamePlayer = {
     const chargeActive = Boolean((window.GameAttack && window.GameAttack.state && window.GameAttack.state.isCharging) || (window.GameInput && window.GameInput.state && window.GameInput.state.charge));
     const attackActive = now < this.state.attackAnimationUntil;
 
-    if (attackActive) {
+    if (now < this.state.hurtUntil) {
+      this.state.animationState = 'ouch';
+    } else if (attackActive) {
       this.state.animationState = 'attack';
     } else if (chargeActive) {
       this.state.animationState = 'charge';
@@ -112,6 +115,10 @@ window.GamePlayer = {
     }
   },
   getAnimationAssetName() {
+    const now = Date.now();
+    if (now < this.state.hurtUntil) {
+      return 'Milly_Ouch';
+    }
     switch (this.state.animationState) {
       case 'run':
         return ['milly-run-1', 'milly-run-2', 'milly-run-3'][Math.floor(Date.now() / 120) % 3];
@@ -132,6 +139,8 @@ window.GamePlayer = {
     this.state.animationState = 'attack';
   },
   getRenderState() {
+    const now = Date.now();
+    const isBlinking = this.isInvulnerable() && this.state.alive;
     return {
       x: this.state.x,
       y: this.state.y,
@@ -139,7 +148,8 @@ window.GamePlayer = {
       height: this.state.height,
       className: 'player',
       sprite: this.getAnimationAssetName(),
-      flipX: this.state.facing < 0
+      flipX: this.state.facing < 0,
+      opacity: isBlinking ? (Math.floor(now / 120) % 2 === 0 ? 0.35 : 1) : 1
     };
   },
   isInvulnerable() {
@@ -150,6 +160,35 @@ window.GamePlayer = {
     if (window.GameUI && typeof GameUI.showStageMessage === 'function') {
       GameUI.showStageMessage('Invulnerable por 2 segundos');
     }
+  },
+  takeHit() {
+    const now = Date.now();
+    if (this.isInvulnerable() || !this.state.alive) {
+      return false;
+    }
+
+    this.state.lives = Math.max(0, this.state.lives - 1);
+    this.state.invulnerableUntil = now + 2000;
+    this.state.hurtUntil = now + 1000;
+    this.state.animationState = 'ouch';
+    this.state.lastInputAt = now;
+
+    if (window.GameUI && typeof GameUI.setLife === 'function') {
+      GameUI.setLife(this.state.lives);
+    }
+
+    if (this.state.lives <= 0) {
+      this.state.alive = false;
+      this.state.vx = 0;
+      this.state.vy = 0;
+      if (window.GameUI && typeof GameUI.showStageMessage === 'function') {
+        GameUI.showStageMessage('Game Over. Vida 0 alcanzada.');
+      }
+    } else if (window.GameUI && typeof GameUI.showStageMessage === 'function') {
+      GameUI.showStageMessage('¡Milly ha sido golpeada!');
+    }
+
+    return true;
   },
   loseLife() {
     if (this.state.lives <= 0) {

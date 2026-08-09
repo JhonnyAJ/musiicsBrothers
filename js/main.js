@@ -107,7 +107,7 @@ window.Game = {
       entities.push(playerRenderState);
       entities.push(...GameAttack.state.projectiles.map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'projectile' })));
       entities.push(...(GameChapter.getPlatforms() || []).map((platform) => ({ x: platform.x, y: platform.y, width: platform.width, height: platform.height, className: 'platform' })));
-      entities.push(...GameEnemy.getEnemies().map((e) => ({ x: e.x, y: e.y, width: e.width, height: e.height, className: 'enemy' })));
+      entities.push(...GameEnemy.getRenderEnemies());
       const boss = GameEnemy.getBoss();
       if (boss) entities.push({ x: boss.x, y: boss.y, width: boss.width, height: boss.height, className: 'boss' });
       entities.push(...GameEnemy.getEnemyProjectiles().map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'enemy-projectile' })));

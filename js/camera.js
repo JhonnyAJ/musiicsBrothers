@@ -4,15 +4,17 @@ window.GameCamera = {
     y: 0,
     width: window.innerWidth,
     height: window.innerHeight,
-    lerp: 0.12,
+    lerp: 0.44,
     minX: 0,
     minY: 0,
+    marginX: 170,
+    marginY: 70,
     // zoom state (1 = no zoom). targetZoom can be changed via API.
-    zoom: 1,
-    targetZoom: 1.25,
-    minZoom: 0.75,
+    zoom: 1.5,
+    targetZoom: 1.5,
+    minZoom: 1.4,
     maxZoom: 2.0,
-    zoomLerp: 0.08
+    zoomLerp: 0.24
   },
   init() {
     window.addEventListener('resize', () => {
@@ -26,8 +28,8 @@ window.GameCamera = {
     // compute visible area in world coordinates based on current zoom
     const visibleW = Math.floor(s.width / s.zoom);
     const visibleH = Math.floor(s.height / s.zoom);
-    const desiredX = Math.max(s.minX, Math.floor(target.x + target.width / 2 - visibleW / 2));
-    const desiredY = Math.max(s.minY, Math.floor(target.y + target.height / 2 - visibleH / 2));
+    const desiredX = Math.max(s.minX, Math.floor(target.x + target.width / 2 - visibleW / 2 - s.marginX));
+    const desiredY = Math.max(s.minY, Math.floor(target.y + target.height / 2 - visibleH / 2 - s.marginY));
     s.x += (desiredX - s.x) * s.lerp;
     s.y += (desiredY - s.y) * s.lerp;
     if (s.x < s.minX) s.x = s.minX;

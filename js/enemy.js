@@ -39,13 +39,18 @@ window.GameEnemy = {
       } else {
         // Spawn 1-2 enemies on platforms that are not in the first column
         const eligiblePlatforms = plats.filter((platform) => platform.x > 120);
-        if (eligiblePlatforms.length >= 2) {
+        if (eligiblePlatforms.length >= 4) {
+          const p1 = eligiblePlatforms[2];
+          const p2 = eligiblePlatforms[3];
+          if (p1) this.spawnEnemy(p1.x + 24, p1.y - 40);
+          if (p2) this.spawnEnemy(p2.x + 24, p2.y - 40);
+        } else if (eligiblePlatforms.length >= 2) {
           const idx1 = Math.floor(eligiblePlatforms.length * 0.4);
           const idx2 = Math.floor(eligiblePlatforms.length * 0.8);
           const p1 = eligiblePlatforms[Math.min(eligiblePlatforms.length - 1, idx1)];
           const p2 = eligiblePlatforms[Math.min(eligiblePlatforms.length - 1, idx2)];
-          if (p1) this.spawnEnemy(p1.x + 12, p1.y - 32);
-          if (p2) this.spawnEnemy(p2.x + 12, p2.y - 32);
+          if (p1) this.spawnEnemy(p1.x + 24, p1.y - 40);
+          if (p2) this.spawnEnemy(p2.x + 24, p2.y - 40);
         } else if (eligiblePlatforms.length === 1) {
           const p = eligiblePlatforms[0];
           this.spawnEnemy(p.x + 12, p.y - 32);
@@ -64,10 +69,14 @@ window.GameEnemy = {
           // choose platforms that are not in the first column (x > 120)
           const eligible = (plats || []).filter((platform) => platform.x > 120);
           const maxStatic = Math.min(4, eligible.length);
+          // Prefer platforms that are farther from the left/start area, so static enemies are not too close to Milly.
+          const startIndex = Math.floor(eligible.length * 0.6);
+          const distantPlatforms = eligible.slice(startIndex);
+          const spawnPlatforms = distantPlatforms.length >= maxStatic ? distantPlatforms : eligible;
           const used = new Set();
           for (let i = 0; i < maxStatic; i += 1) {
-            const idx = Math.floor(((i + 1) / (maxStatic + 1)) * eligible.length);
-            const p = eligible[Math.min(eligible.length - 1, Math.max(0, idx))];
+            const idx = Math.floor(((i + 1) / (maxStatic + 1)) * spawnPlatforms.length);
+            const p = spawnPlatforms[Math.min(spawnPlatforms.length - 1, Math.max(0, idx))];
             if (!p) continue;
             const key = `${p.x}:${p.y}`;
             if (used.has(key)) continue;
@@ -81,7 +90,17 @@ window.GameEnemy = {
     }
   },
   spawnEnemy(x, y) {
-    this.state.enemies.push({ x, y, hp: 1, width: 32, height: 32, canShoot: true });
+    this.state.enemies.push({
+      x,
+      y,
+      hp: 1,
+      width: 32,
+      height: 32,
+      canShoot: true,
+      dead: false,
+      shootingUntil: 0,
+      deathStartedAt: 0
+    });
   },
   setBoss(boss) {
     this.state.boss = boss;
@@ -97,10 +116,29 @@ window.GameEnemy = {
       return;
     }
 
-    if (now - this.state.lastShotAt >= this.state.shotInterval) {
+    const dialogueActive = window.GameDialogue && GameDialogue.state && GameDialogue.state.active && GameDialogue.state.sourceNpcId === 'aldeana';
+    if (!dialogueActive && now - this.state.lastShotAt >= this.state.shotInterval) {
       this.state.lastShotAt = now;
       this.fireEnemyProjectiles(playerState);
     }
+
+    this.state.enemies.forEach((enemy) => {
+      if (enemy.dead) {
+        return;
+      }
+      if (enemy.shootingUntil && now < enemy.shootingUntil) {
+        enemy.spriteState = 'shooting';
+      } else {
+        enemy.spriteState = 'idle';
+      }
+    });
+
+    this.state.enemies = this.state.enemies.filter((enemy) => {
+      if (enemy.dead) {
+        return now - enemy.deathStartedAt < 2000;
+      }
+      return true;
+    });
 
     const levelMaxX = window.GameChapter && typeof GameChapter.getCurrentChapter === 'function'
       ? Math.max(900, ...(GameChapter.getCurrentChapter().platforms || []).map((platform) => platform.x + platform.width))
@@ -121,6 +159,28 @@ window.GameEnemy = {
   getEnemyProjectiles() {
     return this.state.enemyProjectiles;
   },
+  getEnemySpriteName(enemy) {
+    const now = Date.now();
+    if (enemy.dead) {
+      return 'enemy-died';
+    }
+    if (enemy.shootingUntil && now < enemy.shootingUntil) {
+      return 'enemy-shooting';
+    }
+    return 'enemy-shooter';
+  },
+  getRenderEnemies() {
+    return this.state.enemies.map((enemy) => ({
+      x: enemy.x,
+      y: enemy.y,
+      width: enemy.width,
+      height: enemy.height,
+      className: enemy.dead ? 'enemy dead' : 'enemy',
+      sprite: this.getEnemySpriteName(enemy),
+      flipX: false,
+      active: false
+    }));
+  },
   fireEnemyProjectiles(playerState) {
     const enemies = [...this.state.enemies];
     if (this.state.boss && !this.state.boss.defeated) {
@@ -138,6 +198,7 @@ window.GameEnemy = {
       const speed = currentName === 'Aldea Perdida' ? 2.2 : 3.2;
       const vx = (dx / distance) * speed;
       const vy = (dy / distance) * speed;
+      enemy.shootingUntil = Date.now() + 300;
       this.state.enemyProjectiles.push({
         x: startX,
         y: startY,
@@ -181,6 +242,9 @@ window.GameEnemy = {
                           projectile.y < enemy.y + enemy.height &&
                           projectile.y + projectile.height > enemy.y;
         if (collided) {
+          if (enemy.dead) {
+            continue;
+          }
           // damage by projectile.power (fallback 1)
           let dmg = projectile.power && typeof projectile.power === 'number' ? projectile.power : 1;
           // static (non-shooting) enemies always take 1 damage per hit regardless of projectile power
@@ -191,7 +255,12 @@ window.GameEnemy = {
           projectiles.splice(i, 1);
           handled = true;
           if (enemy.hp <= 0) {
-            this.state.enemies.splice(j, 1);
+            enemy.dead = true;
+            enemy.deathStartedAt = Date.now();
+            enemy.spriteState = 'dead';
+            if (window.GameUI && typeof GameUI.showStageMessage === 'function') {
+              GameUI.showStageMessage('Enemigo derrotado.');
+            }
           }
           break;
         }
@@ -212,7 +281,7 @@ window.GameEnemy = {
     const playerTop = playerState.y;
     const playerBottom = playerState.y + playerState.height;
 
-    const allEnemies = [...this.state.enemies];
+    const allEnemies = [...this.state.enemies].filter((enemy) => !enemy.dead);
     const boss = this.getBoss();
     if (boss) {
       allEnemies.push(boss);
@@ -227,8 +296,8 @@ window.GameEnemy = {
 
     const dialogueInvulnerable = window.GameDialogue && GameDialogue.state && GameDialogue.state.active && GameDialogue.state.sourceNpcId === 'aldeana';
     const timeInvulnerable = window.GamePlayer && typeof GamePlayer.isInvulnerable === 'function' && GamePlayer.isInvulnerable();
-    if (collided && window.GamePlayer && typeof GamePlayer.loseLife === 'function' && !timeInvulnerable && !dialogueInvulnerable) {
-      GamePlayer.loseLife();
+if (collided && window.GamePlayer && typeof GamePlayer.takeHit === 'function' && !timeInvulnerable && !dialogueInvulnerable) {
+          GamePlayer.takeHit();
       return true;
     }
 
@@ -256,8 +325,8 @@ window.GameEnemy = {
         this.state.enemyProjectiles.splice(i, 1);
         const dialogueInv = window.GameDialogue && GameDialogue.state && GameDialogue.state.active && GameDialogue.state.sourceNpcId === 'aldeana';
         const timeInv = window.GamePlayer && typeof GamePlayer.isInvulnerable === 'function' && GamePlayer.isInvulnerable();
-        if (window.GamePlayer && typeof GamePlayer.loseLife === 'function' && !timeInv && !dialogueInv) {
-          GamePlayer.loseLife();
+        if (window.GamePlayer && typeof GamePlayer.takeHit === 'function' && !timeInv && !dialogueInv) {
+          GamePlayer.takeHit();
         }
         return true;
       }

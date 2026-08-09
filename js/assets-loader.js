@@ -10,7 +10,11 @@ window.AssetsLoader = {
       'milly-jump-2': 'assets/sprites/milly/Milly-Jump2.png',
       'milly-inactiva': 'assets/sprites/milly/Milly-Inactiva.png',
       'milly-pose-poderosa': 'assets/sprites/milly/Milly-posePoderosa.png',
-      'milly-fuya': 'assets/sprites/milly/Milly-fuya.png'
+      'milly-fuya': 'assets/sprites/milly/Milly-fuya.png',
+      'Milly_Ouch': 'assets/sprites/milly/Milly_Ouch.png',
+      'enemy-shooter': 'assets/sprites/enemy/shooterEnemy1.png',
+      'enemy-shooting': 'assets/sprites/enemy/ShootingEnemy.png',
+      'enemy-died': 'assets/sprites/enemy/diedEnemy.png'
     };
 
     const assetNames = Object.keys(manifest);

@@ -45,9 +45,10 @@ body.game-page {
 }
 
 .game-layer {
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
   pointer-events: none;
-  margin-top: 300px;
   height: 100%;
   width: 100%;
   transform-origin: 0 0;
@@ -108,6 +109,11 @@ body.game-page {
 .enemy {
   background: linear-gradient(135deg, #ff6f6f 0%, #d13f3f 100%);
   border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.enemy.sprite-entity {
+  background: transparent !important;
+  border: none !important;
 }
 
 .npc {
@@ -173,9 +179,9 @@ body.game-page {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: rgba(12, 12, 22, 0.88);
+  background: rgba(12, 12, 22, 0.35);
   padding: 12px;
-  border: 1px solid #36364d;
+  border: 1px solid rgba(54, 54, 77, 0.55);
   border-radius: 12px;
   z-index: 40;
 }

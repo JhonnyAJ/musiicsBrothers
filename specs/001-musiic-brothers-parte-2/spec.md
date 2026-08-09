@@ -19,6 +19,10 @@
 
 - Q: ¿Cómo debe adaptarse la apariencia de Milly a los sprites? → A: Los sprites de Milly se escalarán a 32x48 px para conservar la hitbox actual. Correrá usando `Milly-Run1`, `Milly-Run2` y `Milly-Run3`, alternándolos al moverse; cuando esté quieta usará `Milly-Stop`; al saltar usará `Milly-Jump1` y `Milly-Jump2`; si no recibe instrucciones durante 4 segundos usará `Milly-Inactiva`; al cargar el poder usará `Milly-posePoderosa`; al lanzar el poder usará `Milly-fuya`.
 
+### Session 2026-08-09
+
+- Q: ¿Cómo deben representarse los enemigos visualmente en la Parte 2? → A: Los enemigos deben reemplazar el objeto genérico actual por sprites de `assets/sprites/enemy`; para el estado de ataque se usará `shooterEnemy1.png`, para el disparo se usará `ShootingEnemy.png` y para la muerte se usará `diedEnemy.png`, mostrando este último durante 2 segundos antes de que el enemigo desaparezca.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Dominar a Milly y su ataque mágico (Priority: P1)
@@ -134,6 +138,7 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **FR-016**: El sistema MUST cargar y reproducir animaciones de Milly usando frames individuales desde `assets/milly` con nombre `Milly-<Accion><orden>` para cada fase de movimiento, salto y ataque.
 - **FR-017**: El sistema MUST presentar, únicamente en la Parte 2 del juego, el fondo de juego usando `assets/backgrounds/FondoGame` y dibujar plataformas encima del fondo, ocupando toda la pantalla desde abajo y usando la imagen `assets/backgrounds/plataforma.png` para todas ellas.
 - **FR-018**: Cada uno de los tres niveles de la Parte 2 MUST contener como mínimo 15 plataformas separadas entre sí y distribuidas por toda la pantalla, que permitan a Milly progresar hasta el portal de pase de nivel.
+- **FR-019**: El sistema MUST reemplazar la representación visual de los enemigos por sprites localizados en `assets/sprites/enemy`. Para el estado de ataque se usará `shooterEnemy1.png`, para el disparo `ShootingEnemy.png` y para la muerte `diedEnemy.png`, presentando el sprite de muerte durante 2 segundos antes de remover el enemigo.
 
 ### Key Entities
 
@@ -162,12 +167,14 @@ El jugador debe encontrar fragmentos temporales escondidos en el mundo para refo
 - **SC-012**: Los diálogos de NPC must presentarse en castellano de fantasía medieval comprensible.
 - **SC-013**: La animación de Milly must usar los frames de `assets/milly` con la convención `Milly-<Accion><orden>` y mostrarse en movimiento, salto y ataque mágico.
 - **SC-014**: Cada uno de los tres niveles de la Parte 2 must incluir al menos 15 plataformas sobre el fondo `assets/backgrounds/FondoGame`, distribuidas por toda la pantalla y usando la imagen `assets/backgrounds/plataforma.png` antes de alcanzar el portal de fin de nivel.
+- **SC-015**: Los enemigos must representarse con sprites usando `shooterEnemy1.png` para ataque, `ShootingEnemy.png` para la visualización del disparo enemigo y `diedEnemy.png` para la animación de muerte de 2 segundos.
 
 ## Dependencies
 
 - El juego no debe usar librerías externas ni frameworks de terceros.
 - Todos los recursos deben cargarse localmente desde `assets/`.
 - Los recursos de animación de Milly deben provenir de `assets/milly` y seguir la convención de nombres `Milly-<Accion><orden>` para cada fotograma.
+- Los recursos de animación de enemigos deben provenir de `assets/sprites/enemy` y usarse para los estados de ataque, disparo y muerte.
 - El fondo de juego debe usarse desde `assets/backgrounds/FondoGame`, con las plataformas dibujadas encima.
 - La experiencia debe ser ejecutable en el navegador sin servidor.
 
