@@ -111,7 +111,7 @@ window.Game = {
       const boss = GameEnemy.getBoss();
       if (boss) entities.push({ x: boss.x, y: boss.y, width: boss.width, height: boss.height, className: 'boss' });
       entities.push(...GameEnemy.getEnemyProjectiles().map((p) => ({ x: p.x, y: p.y, width: p.width, height: p.height, className: 'enemy-projectile' })));
-      entities.push(...GameChapter.getNPCs().map((npc) => ({ x: npc.x, y: npc.y, width: npc.width, height: npc.height, className: 'npc' })));
+      entities.push(...GameChapter.getNPCs().map((npc) => ({ x: npc.x, y: npc.y, width: npc.width, height: npc.height, className: 'npc', sprite: npc.sprite || null, flipX: !!npc.flipX })));
       const object = GameChapter.getActiveObject();
       if (object) entities.push({ x: object.x, y: object.y, width: object.width, height: object.height, className: 'activatable', active: object.activated });
       const portal = GameChapter.getPortal();

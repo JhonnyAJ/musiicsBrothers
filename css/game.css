@@ -116,6 +116,11 @@ body.game-page {
   border: none !important;
 }
 
+.npc.sprite-entity {
+  background: transparent !important;
+  border: none !important;
+}
+
 .npc {
   background: linear-gradient(135deg, #6cd4ff 0%, #3a8cff 100%);
   border: 2px solid rgba(255, 255, 255, 0.2);

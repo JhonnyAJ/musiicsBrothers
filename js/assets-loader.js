@@ -12,6 +12,8 @@ window.AssetsLoader = {
       'milly-pose-poderosa': 'assets/sprites/milly/Milly-posePoderosa.png',
       'milly-fuya': 'assets/sprites/milly/Milly-fuya.png',
       'Milly_Ouch': 'assets/sprites/milly/Milly_Ouch.png',
+      'aldeano': 'assets/sprites/extras/Aldeano.png',
+      'aldeano-talking': 'assets/sprites/extras/AldeanoTalking.png',
       'enemy-shooter': 'assets/sprites/enemy/shooterEnemy1.png',
       'enemy-shooting': 'assets/sprites/enemy/ShootingEnemy.png',
       'enemy-died': 'assets/sprites/enemy/diedEnemy.png'

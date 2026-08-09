@@ -73,8 +73,9 @@ window.GameChapter = {
       const platform = platforms[Math.min(index, platforms.length - 1)];
       return [{
         ...npcTemplate,
+        sprite: npcTemplate.sprite || 'aldeano',
         x: platform.x + 10,
-        y: platform.y - npcTemplate.height,
+        y: platform.y - (npcTemplate.height || 48),
       }];
     };
 
@@ -91,9 +92,9 @@ window.GameChapter = {
         portal: makePortal(aldeaPlatforms),
         npcs: makeNpc(aldeaPlatforms, 1, {
           id: 'aldeana',
-          name: 'Aldeana del valle',
-          width: 32,
-          height: 48,
+            name: 'Aldeana del valle',
+            width: 48,
+            height: 72,
           talked: false,
           dialogue: [
             'Aldeana: Oh viajera, he sentido tu magia en la distancia.',
@@ -165,6 +166,18 @@ window.GameChapter = {
     if (window.GameDialogue && GameDialogue.state) {
       GameDialogue.state.sourceNpcId = id;
     }
+    // change NPC sprite to talking pose and orient towards the player
+    try {
+      const player = window.GamePlayer && GamePlayer.state ? GamePlayer.state : null;
+      if (player) {
+        // if player is left of npc, flip horizontally so npc faces left
+        npc.flipX = player.x < npc.x;
+      }
+      npc._prevSprite = npc.sprite || 'aldeano';
+      npc.sprite = 'aldeano-talking';
+    } catch (e) {
+      // ignore non-critical
+    }
 
     GameDialogue.setLines(npc.dialogue);
     GameDialogue.state.onComplete = () => this.onDialogueComplete(npc);
@@ -177,6 +190,13 @@ window.GameChapter = {
     if (window.GameDialogue && GameDialogue.state) {
       GameDialogue.state.sourceNpcId = null;
     }
+    // restore NPC sprite after dialogue
+    try {
+      if (npc && npc._prevSprite) {
+        npc.sprite = npc._prevSprite;
+        delete npc._prevSprite;
+      }
+    } catch (e) {}
     const clue = npc.clue || 'Has escuchado la historia del lugar.';
     GameUI.showStageMessage(clue);
     this.checkPortalActivation();
